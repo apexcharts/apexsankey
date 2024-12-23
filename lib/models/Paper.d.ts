@@ -1,13 +1,17 @@
+import { SankeyOptions } from './Options';
 import { Element, Svg } from '@svgdotjs/svg.js';
+
 export declare class Paper {
-    private readonly width;
-    private readonly height;
-    private readonly spacing;
+    element: HTMLElement;
+    options: SankeyOptions;
     canvas: Svg;
-    constructor(element: HTMLElement, width: number, height: number, canvasStyle: string, spacing: number);
+    constructor(element: HTMLElement, options: SankeyOptions);
+    private getYShift;
     add(element: Element): void;
+    clear(): void;
     resetViewBox(): void;
     updateViewBox(x: number, y: number, width: number, height: number): void;
-    zoom(zoomFactor: number): void;
-    clear(): void;
+    get height(): number;
+    get spacing(): number;
+    get width(): number;
 }

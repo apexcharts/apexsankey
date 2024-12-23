@@ -1,9 +1,10 @@
-import { GraphData, SankeyGraph } from './models/Graph';
 import { SankeyOptions } from './models/Options';
+import { GraphData, SankeyGraph } from './models/Graph';
+
 export declare class ApexSankey {
     element: HTMLElement;
-    graph: SankeyGraph;
     options: SankeyOptions;
+    graph: SankeyGraph;
     constructor(element: HTMLElement, options: SankeyOptions);
     render(data: GraphData): SankeyGraph;
 }

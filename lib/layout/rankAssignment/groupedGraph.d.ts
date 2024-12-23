@@ -1,4 +1,5 @@
 import { Graph } from 'graphlib';
+
 /**
  * Create a new graph where nodes in the same rank set are merged into one node.
  *

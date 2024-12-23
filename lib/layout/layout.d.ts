@@ -1,16 +1,11 @@
-/**
- * Sankey layout
- *
- * @module layout
- */
-/// <reference types="node_modules/@types/graphlib" />
 import { SankeyOptions } from '../models/Options';
+
 /**
  * Sankey layout
  * @constructor sankey
  */
 export declare function sankey(options: Partial<SankeyOptions>): {
-    (linksIn?: any, nodesIn?: any, data?: any): import("graphlib").Graph;
+    (linksIn?: any, nodesIn?: any, data?: any): import('graphlib').Graph;
     nodes(): any[];
     links(): any[];
     order(): any;
@@ -20,27 +15,27 @@ export declare function sankey(options: Partial<SankeyOptions>): {
      * @param size {[width, height]} - size
      * @returns {sankeyLayout|Number[]}
      */
-    size(x: any): {
+    size(x: any): number[] | {
         (G: any, order: any): any[];
         scaleToFit(G: any, order: any): void;
-        size(x?: any): any | number[];
-        separation(x?: any): any | ((a: any, b: any, c: any) => number);
+        size(x?: any): number[] | any;
+        separation(x?: any): ((a: any, b: any, c: any) => number) | any;
         whitespace(x?: number): number | any;
         scale(x?: number): any;
-    } | any | number[];
-    separation(x: any): {
+    } | any;
+    separation(x: any): ((a: any, b: any, c: any) => number) | {
         (G: any, order: any): any[];
         scaleToFit(G: any, order: any): void;
-        size(x?: any): any | number[];
-        separation(x?: any): any | ((a: any, b: any, c: any) => number);
+        size(x?: any): number[] | any;
+        separation(x?: any): ((a: any, b: any, c: any) => number) | any;
         whitespace(x?: number): number | any;
         scale(x?: number): any;
-    } | any | ((a: any, b: any, c: any) => number);
+    } | any;
     whitespace(x: any): number | {
         (G: any, order: any): any[];
         scaleToFit(G: any, order: any): void;
-        size(x?: any): any | number[];
-        separation(x?: any): any | ((a: any, b: any, c: any) => number);
+        size(x?: any): number[] | any;
+        separation(x?: any): ((a: any, b: any, c: any) => number) | any;
         whitespace(x?: number): number | any;
         scale(x?: number): any;
     } | any;
