@@ -11,10 +11,13 @@
   "type": "module",
   "main": "./apexsankey.min.js",
   "module": "./apexsankey.es.min.js",
-  "typings": "./index.d.ts",
+  "types": "./index.d.ts",
   "exports": {
     ".": {
-      "import": "./apexsankey.es.min.js",
+      "import": {
+        "types": "./index.d.ts",
+        "default": "./apexsankey.es.min.js"
+      },
       "require": "./apexsankey.min.js"
     }
   }
