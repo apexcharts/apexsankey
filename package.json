@@ -1,13 +1,10 @@
 {
   "name": "apexsankey",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "dependencies": {
     "defined": "^1.0.1",
     "graphlib": "~2.1.0",
     "lodash": "^4.17.21"
-  },
-  "peerDependencies": {
-    "@apex/graph-utils": "*"
   },
   "type": "module",
   "main": "./apexsankey.min.js",
