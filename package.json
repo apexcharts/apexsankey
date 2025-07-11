@@ -10,6 +10,7 @@
   "main": "./apexsankey.min.js",
   "module": "./apexsankey.es.min.js",
   "types": "./index.d.ts",
+  "license": "See License in LICENSE",
   "exports": {
     ".": {
       "import": {
