@@ -32,6 +32,6 @@
   },
   "scripts": {
     "prepare": "husky",
-    "release": "standard-version"
+    "release": "standard-version --no-tag"
   }
 }
