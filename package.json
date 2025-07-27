@@ -33,5 +33,10 @@
   "scripts": {
     "prepare": "husky",
     "release": "standard-version --no-tag"
+  },
+  "standard-version": {
+    "skip": {
+      "tag": true
+    }
   }
 }

@@ -1,1 +1,1 @@
-npm run release && git push --follow-tags --no-verify
+npm run release && git push --no-verify
