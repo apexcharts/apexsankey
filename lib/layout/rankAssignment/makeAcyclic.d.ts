@@ -9,4 +9,4 @@ export declare function findSpanningTree(G: any, v0: any): Graph;
  * Returns 1 if w is a descendent of v, -1 if v is a descendent of w, and 0 if
  * they are unrelated.
  */
-export declare function nodeRelationship(tree: any, v: any, w: any): 1 | 0 | -1;
+export declare function nodeRelationship(tree: any, v: any, w: any): 1 | -1 | 0;

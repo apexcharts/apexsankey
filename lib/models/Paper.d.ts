@@ -9,6 +9,7 @@ export declare class Paper {
     private getYShift;
     add(element: Element): void;
     clear(): void;
+    exportToSvg(): void;
     resetViewBox(): void;
     updateViewBox(x: number, y: number, width: number, height: number): void;
     get height(): number;

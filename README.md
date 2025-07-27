@@ -62,7 +62,9 @@ The layout can be configured by either setting the properties in the table below
 | nodeBorderColor    | none                       | The border color of the nodes                                                     |
 | onNodeClick        | empty function             | The callback function for node click. Node object will be parameter for callback. |
 | edgeOpacity        | 0.4                        | The opacity value for edges. Values must be between 0 to 1 and in fraction.       |
+| edgeGradientFill   | true                       | Enable gradient fill based on source and target node colors.                      |
 | enableTooltip      | false                      | Enable tooltip on hover of nodes                                                  |
+| enableToolbar      | false                      | Enable/disable graph toolbar
 | tooltipId          | `sankey-tooltip-container` | The tooltip HTML element id                                                       |
 | tooltipTemplate    | tooltipTemplate            | The HTML template for tooltip                                                     |
 | tooltipBorderColor | `#BCBCBC`                  | The border color of tooltip                                                       |
