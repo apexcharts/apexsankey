@@ -10,7 +10,7 @@
   "main": "./apexsankey.min.js",
   "module": "./apexsankey.es.min.js",
   "types": "./index.d.ts",
-  "license": "See License in LICENSE",
+  "license": "See LICENSE in LICENSE",
   "exports": {
     ".": {
       "import": {
@@ -21,22 +21,6 @@
         "types": "./index.d.ts",
         "default": "./apexsankey.min.js"
       }
-    }
-  },
-  "devDependencies": {
-    "@commitlint/cli": "^19.8.1",
-    "@commitlint/config-conventional": "^19.8.1",
-    "commitlint": "^19.8.1",
-    "husky": "^9.1.7",
-    "standard-version": "^9.5.0"
-  },
-  "scripts": {
-    "prepare": "husky",
-    "release": "standard-version --no-tag"
-  },
-  "standard-version": {
-    "skip": {
-      "tag": true
     }
   }
 }
