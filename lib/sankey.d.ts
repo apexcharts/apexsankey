@@ -6,5 +6,10 @@ export declare class ApexSankey {
     options: SankeyOptions;
     graph: SankeyGraph;
     constructor(element: HTMLElement, options: SankeyOptions);
+    static setLicense(key: string): void;
+    /**
+     * Handle watermark display based on license validation
+     */
+    private handleWatermark;
     render(data: GraphData): SankeyGraph;
 }

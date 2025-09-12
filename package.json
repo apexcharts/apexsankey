@@ -1,6 +1,6 @@
 {
   "name": "apexsankey",
-  "version": "1.2.4",
+  "version": "1.2.5",
   "dependencies": {
     "defined": "^1.0.1",
     "graphlib": "~2.1.0",

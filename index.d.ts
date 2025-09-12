@@ -1,1 +1,4 @@
-export { ApexSankey as default } from './lib/sankey';
+import { ApexSankey } from './lib/sankey';
+
+export { ApexSankey as default };
+export { ApexSankey };
