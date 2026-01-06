@@ -23,7 +23,7 @@ npm install apexsankey
 ## Usage
 
 ```js
-import ApexSankey from "apexsankey";
+import ApexSankey from 'apexsankey';
 ```
 
 To create a basic sankey with minimal configuration, write as follows:
@@ -47,32 +47,46 @@ To create a basic sankey with minimal configuration, write as follows:
  const graph = sankey.render(data);
 ```
 
+## Setting the License
+
+To use ApexSankey with a commercial license, set your license key before creating any chart instances:
+
+```js
+import ApexSankey from 'apexsankey';
+
+// set license key before creating any charts
+ApexSankey.setLicense('your-license-key');
+
+const sankey = new ApexSankey(document.getElementById('sankey-container'), options);
+const graph = sankey.render(data);
+```
+
 ## ApexSankey Options
 
 The layout can be configured by either setting the properties in the table below by passing a second arg to ApexSankey with these properties set. The latter takes precedence.
 
-| Options            | Default                    | Description                                                                       |
-| ------------------ | -------------------------- | --------------------------------------------------------------------------------- |
-| width              | 800                        | The width of graph container                                                      |
-| height             | 800                        | The height of graph container                                                     |
-| canvasStyle        | None                       | The css styles for canvas root container                                          |
-| spacing            | 100                        | The spacing from top and left of graph container                                  |
-| nodeWidth          | 20                         | The width of graph nodes                                                          |
-| nodeBorderWidth    | 1                          | The border width of the nodes in pixels                                           |
-| nodeBorderColor    | none                       | The border color of the nodes                                                     |
-| onNodeClick        | empty function             | The callback function for node click. Node object will be parameter for callback. |
-| edgeOpacity        | 0.4                        | The opacity value for edges. Values must be between 0 to 1 and in fraction.       |
-| edgeGradientFill   | true                       | Enable gradient fill based on source and target node colors.                      |
-| enableTooltip      | false                      | Enable tooltip on hover of nodes                                                  |
-| enableToolbar      | false                      | Enable/disable graph toolbar
-| tooltipId          | `sankey-tooltip-container` | The tooltip HTML element id                                                       |
-| tooltipTemplate    | tooltipTemplate            | The HTML template for tooltip                                                     |
-| tooltipBorderColor | `#BCBCBC`                  | The border color of tooltip                                                       |
-| tooltipBGColor     | `#FFFFFF`                  | The background color of tooltip                                                   |
-| fontSize           | `14px`                     | The size of font of nodes                                                         |
-| fontFamily         | None                       | The font family of nodes                                                          |
-| fontWeight         | 400                        | The font weight of nodes                                                          |
-| fontColor          | `#000000`                  | The font color of nodes                                                           |
+| Options | Default | Description |
+| --- | --- | --- |
+| width | 800 | The width of graph container |
+| height | 800 | The height of graph container |
+| canvasStyle | None | The css styles for canvas root container |
+| spacing | 100 | The spacing from top and left of graph container |
+| nodeWidth | 20 | The width of graph nodes |
+| nodeBorderWidth | 1 | The border width of the nodes in pixels |
+| nodeBorderColor | none | The border color of the nodes |
+| onNodeClick | empty function | The callback function for node click. Node object will be parameter for callback. |
+| edgeOpacity | 0.4 | The opacity value for edges. Values must be between 0 to 1 and in fraction. |
+| edgeGradientFill | true | Enable gradient fill based on source and target node colors. |
+| enableTooltip | false | Enable tooltip on hover of nodes |
+| enableToolbar | false | Enable/disable graph toolbar |
+| tooltipId | `sankey-tooltip-container` | The tooltip HTML element id |
+| tooltipTemplate | tooltipTemplate | The HTML template for tooltip |
+| tooltipBorderColor | `#BCBCBC` | The border color of tooltip |
+| tooltipBGColor | `#FFFFFF` | The background color of tooltip |
+| fontSize | `14px` | The size of font of nodes |
+| fontFamily | None | The font family of nodes |
+| fontWeight | 400 | The font weight of nodes |
+| fontColor | `#000000` | The font color of nodes |
 
 Default tooltip template
 
@@ -121,8 +135,7 @@ Passed data should be an object containing nodes, edges and options. Nodes, edge
 
     If order is not specified, the nodes are automatically assigned to layers. If order is specified, it is used directly and no rank assignment or ordering algorithm takes place.
 
-    The order structure has three nested lists: order is a list of layers, each of which is a list of bands, each of which is a list of node ids.
-    For example,
+    The order structure has three nested lists: order is a list of layers, each of which is a list of bands, each of which is a list of node ids. For example,
 
     ```json
     {
@@ -141,34 +154,34 @@ Passed data should be an object containing nodes, edges and options. Nodes, edge
 const data = {
   nodes: [
     {
-      id: "a",
-      title: "AAA",
+      id: 'a',
+      title: 'AAA',
     },
     {
-      id: "b",
-      title: "BBB",
+      id: 'b',
+      title: 'BBB',
     },
     {
-      id: "c",
-      title: "CCC",
+      id: 'c',
+      title: 'CCC',
     },
   ],
   edges: [
     {
-      source: "a",
-      target: "c",
+      source: 'a',
+      target: 'c',
       value: 1,
-      type: "A",
+      type: 'A',
     },
     {
-      source: "b",
-      target: "c",
+      source: 'b',
+      target: 'c',
       value: 2,
-      type: "A",
+      type: 'A',
     },
   ],
   options: {
-    order: [[["a", "b"]], [["c"]]],
+    order: [[['a', 'b']], [['c']]],
   },
 };
 ```

@@ -2,6 +2,7 @@ import { Paper } from './Paper';
 import { SankeyOptions } from './Options';
 import { Graph } from 'graphlib';
 import { G } from '@svgdotjs/svg.js';
+import { ChartContext } from '../../../../graph-utils/src/index.ts';
 
 export interface GraphPoint {
     readonly x: number;
@@ -26,6 +27,7 @@ export interface GraphData {
 export declare class SankeyGraph extends Paper {
     graph: Graph;
     maxRank: number;
+    constructor(element: HTMLElement, options: SankeyOptions, chartContext: ChartContext);
     construct(data: GraphData): void;
     render({ keepOldPosition }?: {
         keepOldPosition?: boolean;
