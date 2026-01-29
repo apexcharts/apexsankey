@@ -16,24 +16,24 @@ export declare function sankey(options: Partial<SankeyOptions>): {
      * @returns {sankeyLayout|Number[]}
      */
     size(x: any): number[] | {
-        (G: any, order: any): any[];
-        scaleToFit(G: any, order: any): void;
+        (G: any, order: any, edgeGap?: number): any[];
+        scaleToFit(G: any, order: any, edgeGap?: number): void;
         size(x?: any): number[] | any;
         separation(x?: any): ((a: any, b: any, c: any) => number) | any;
         whitespace(x?: number): number | any;
         scale(x?: number): any;
     } | any;
     separation(x: any): ((a: any, b: any, c: any) => number) | {
-        (G: any, order: any): any[];
-        scaleToFit(G: any, order: any): void;
+        (G: any, order: any, edgeGap?: number): any[];
+        scaleToFit(G: any, order: any, edgeGap?: number): void;
         size(x?: any): number[] | any;
         separation(x?: any): ((a: any, b: any, c: any) => number) | any;
         whitespace(x?: number): number | any;
         scale(x?: number): any;
     } | any;
     whitespace(x: any): number | {
-        (G: any, order: any): any[];
-        scaleToFit(G: any, order: any): void;
+        (G: any, order: any, edgeGap?: number): any[];
+        scaleToFit(G: any, order: any, edgeGap?: number): void;
         size(x?: any): number[] | any;
         separation(x?: any): ((a: any, b: any, c: any) => number) | any;
         whitespace(x?: number): number | any;

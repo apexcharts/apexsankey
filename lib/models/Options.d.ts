@@ -14,8 +14,12 @@ export interface NodeOptions {
     readonly onNodeClick?: (node: any) => void;
 }
 export interface EdgeOptions {
+    readonly edgeGap: number;
     readonly edgeGradientFill: boolean;
     readonly edgeOpacity: number;
+}
+export interface LayoutOptions {
+    readonly whitespace: number;
 }
 export interface FontOptions {
     readonly fontColor: string;
@@ -30,5 +34,5 @@ export interface TooltipOptions {
     readonly tooltipId: string;
     readonly tooltipTemplate?: (content: any) => string;
 }
-export type SankeyOptions = CommonOptions & EdgeOptions & FontOptions & NodeOptions & TooltipOptions;
+export type SankeyOptions = CommonOptions & EdgeOptions & FontOptions & LayoutOptions & NodeOptions & TooltipOptions;
 export declare const DefaultOptions: SankeyOptions;
