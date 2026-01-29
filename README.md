@@ -78,7 +78,7 @@ The layout can be configured by either setting the properties in the table below
 | edgeOpacity | 0.4 | The opacity value for edges. Values must be between 0 to 1 and in fraction. |
 | edgeGradientFill | true | Enable gradient fill based on source and target node colors. |
 | edgeGap | 2 | The gap in pixels between edges at node connection points. |
-| whitespace | 0.25 | Fraction of vertical space used for margins between nodes (0-1). Lower values make nodes taller. |
+| whitespace | 0.18 | Fraction of vertical space used for margins between nodes (0-1). Lower values make nodes taller. |
 | enableTooltip | false | Enable tooltip on hover of nodes |
 | enableToolbar | false | Enable/disable graph toolbar |
 | tooltipId | `sankey-tooltip-container` | The tooltip HTML element id |
