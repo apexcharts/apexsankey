@@ -6,6 +6,10 @@
     "graphlib": "~2.1.0",
     "lodash": "^4.17.21"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/apexcharts/apexsankey"
+  },
   "type": "module",
   "main": "./apexsankey.min.js",
   "module": "./apexsankey.es.min.js",
