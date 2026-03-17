@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sankey – Connected Path Highlight on Hover</title>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&display=swap" rel="stylesheet" />
+    <script src="../apexsankey.min.js"></script>
+    <style>
+      body {
+        font-family: 'Quicksand', sans-serif;
+        margin: 0;
+        padding: 24px;
+        background: #f5f6fa;
+        color: #212121;
+      }
+
+      h1 {
+        font-size: 1.4rem;
+        font-weight: 600;
+        margin: 0 0 4px;
+      }
+
+      p.subtitle {
+        margin: 0 0 20px;
+        font-size: 0.9rem;
+        color: #555;
+      }
+
+      .controls {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 24px;
+        align-items: center;
+        background: #fff;
+        border: 1px solid #dde1e7;
+        border-radius: 8px;
+        padding: 16px 20px;
+        margin-bottom: 20px;
+        max-width: 860px;
+      }
+
+      .control-group {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .control-group label {
+        font-weight: 600;
+        font-size: 0.875rem;
+        white-space: nowrap;
+      }
+
+      .toggle-btn {
+        cursor: pointer;
+        padding: 6px 16px;
+        border-radius: 6px;
+        border: 2px solid #008ffb;
+        background: #008ffb;
+        color: #fff;
+        font-family: 'Quicksand', sans-serif;
+        font-weight: 600;
+        font-size: 0.875rem;
+        transition:
+          background 0.15s,
+          color 0.15s;
+      }
+
+      .toggle-btn.off {
+        background: #fff;
+        color: #008ffb;
+      }
+
+      input[type='range'] {
+        width: 140px;
+        accent-color: #008ffb;
+      }
+
+      #opacity-value {
+        font-weight: 600;
+        min-width: 36px;
+        text-align: right;
+      }
+
+      .hint {
+        font-size: 0.8rem;
+        color: #777;
+        margin-bottom: 12px;
+      }
+
+      #svg-sankey {
+        margin: 0 auto;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Connected Path Highlight on Hover</h1>
+    <p class="subtitle">
+      Hover over any <strong>node</strong> or <strong>edge</strong> to highlight its connected flow path and dim
+      unrelated elements. Use the controls below to explore the options.
+    </p>
+
+    <div class="controls">
+      <div class="control-group">
+        <label for="toggle-highlight">highlightConnectedPath</label>
+        <button id="toggle-highlight" class="toggle-btn" aria-pressed="true">Enabled</button>
+      </div>
+      <div class="control-group">
+        <label for="dim-opacity">dimOpacity</label>
+        <input type="range" id="dim-opacity" min="0" max="0.5" step="0.05" value="0.15" />
+        <span id="opacity-value">0.15</span>
+      </div>
+    </div>
+
+    <p class="hint">💡 Hover a node or an edge in the diagram to see the effect.</p>
+
+    <div id="svg-sankey"></div>
+
+    <script>
+      const data = {
+        nodes: [
+          {id: 'Solar', title: 'Solar'},
+          {id: 'Wind', title: 'Wind'},
+          {id: 'Hydro', title: 'Hydro'},
+          {id: 'Gas', title: 'Gas'},
+          {id: 'Coal', title: 'Coal'},
+          {id: 'Electricity', title: 'Electricity'},
+          {id: 'Heat', title: 'Heat'},
+          {id: 'Transport', title: 'Transport'},
+          {id: 'Industry', title: 'Industry'},
+          {id: 'Homes', title: 'Homes'},
+          {id: 'Losses', title: 'Losses'},
+        ],
+        edges: [
+          {source: 'Solar', target: 'Electricity', value: 30},
+          {source: 'Wind', target: 'Electricity', value: 25},
+          {source: 'Hydro', target: 'Electricity', value: 20},
+          {source: 'Gas', target: 'Electricity', value: 15},
+          {source: 'Gas', target: 'Heat', value: 20},
+          {source: 'Coal', target: 'Electricity', value: 10},
+          {source: 'Coal', target: 'Heat', value: 10},
+          {source: 'Electricity', target: 'Transport', value: 25},
+          {source: 'Electricity', target: 'Industry', value: 35},
+          {source: 'Electricity', target: 'Homes', value: 25},
+          {source: 'Electricity', target: 'Losses', value: 15},
+          {source: 'Heat', target: 'Industry', value: 18},
+          {source: 'Heat', target: 'Homes', value: 12},
+        ],
+      };
+
+      let highlightEnabled = true;
+      let dimOpacity = 0.2;
+      let sankeyInstance = null;
+
+      function buildOptions() {
+        return {
+          nodeWidth: 20,
+          fontFamily: 'Quicksand, sans-serif',
+          fontWeight: '600',
+          height: 520,
+          width: 860,
+          edgeOpacity: 0.4,
+          enableToolbar: false,
+          highlightConnectedPath: highlightEnabled,
+          dimOpacity: dimOpacity,
+        };
+      }
+
+      function render() {
+        const container = document.getElementById('svg-sankey');
+        container.innerHTML = '';
+        sankeyInstance = new ApexSankey(container, buildOptions());
+        sankeyInstance.render(data);
+      }
+
+      render();
+
+      // Toggle button
+      const toggleBtn = document.getElementById('toggle-highlight');
+      toggleBtn.addEventListener('click', () => {
+        highlightEnabled = !highlightEnabled;
+        toggleBtn.textContent = highlightEnabled ? 'Enabled' : 'Disabled';
+        toggleBtn.classList.toggle('off', !highlightEnabled);
+        toggleBtn.setAttribute('aria-pressed', String(highlightEnabled));
+        render();
+      });
+
+      // Opacity slider
+      const opacitySlider = document.getElementById('dim-opacity');
+      const opacityValue = document.getElementById('opacity-value');
+      opacitySlider.addEventListener('input', () => {
+        dimOpacity = parseFloat(opacitySlider.value);
+        opacityValue.textContent = dimOpacity.toFixed(2);
+        render();
+      });
+    </script>
+  </body>
+</html>

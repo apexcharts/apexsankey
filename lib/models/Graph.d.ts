@@ -1,8 +1,7 @@
 import { Paper } from './Paper';
 import { SankeyOptions } from './Options';
-import { Graph } from 'graphlib';
-import { G } from '@svgdotjs/svg.js';
-import { ChartContext } from '../../../../graph-utils/src/index.ts';
+import { GraphEdge, SankeyGraph as SankeyGraphLayout } from '../layout/types';
+import { ChartContext, G } from '../../../../graph-utils/src/index.ts';
 
 export interface GraphPoint {
     readonly x: number;
@@ -25,12 +24,20 @@ export interface GraphData {
     readonly options: SankeyOptions;
 }
 export declare class SankeyGraph extends Paper {
-    graph: Graph;
+    graph: SankeyGraphLayout;
     maxRank: number;
+    /** Options resolved with CSS custom property overrides for the current render pass. */
+    private renderOptions;
+    /** Accessibility helper — re-created on each render pass. */
+    private a11yHelper;
+    /** Path highlighter — re-created on each render pass when feature is enabled. */
+    private pathHighlighter;
+    /** Guard: entrance animation plays only on the first render. */
+    private _hasAnimated;
     constructor(element: HTMLElement, options: SankeyOptions, chartContext: ChartContext);
     construct(data: GraphData): void;
     render({ keepOldPosition }?: {
-        keepOldPosition?: boolean;
+        keepOldPosition?: boolean | undefined;
     }): void;
-    renderEdge(edgeObj: any, group: G): void;
+    renderEdge(edgeObj: GraphEdge, group: G): void;
 }

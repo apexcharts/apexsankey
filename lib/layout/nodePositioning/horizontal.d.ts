@@ -1,2 +1,4 @@
-export declare function spanMinWidths(G: any, order: any): any[];
-export declare function positionHorizontally(G: any, order: any, width: any, minWidths: any): void;
+import { LayoutGraph } from './justified';
+
+export declare function spanMinWidths(G: LayoutGraph, order: string[][][]): number[];
+export declare function positionHorizontally(G: LayoutGraph, order: string[][][], width: number, minWidths: number[]): void;

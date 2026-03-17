@@ -1,4 +1,4 @@
-import { Graph } from 'graphlib';
+import { RankSet, SankeyGraph } from '../types';
 
 /**
  * Create a new graph where nodes in the same rank set are merged into one node.
@@ -7,4 +7,4 @@ import { Graph } from 'graphlib';
  * atribute of the edges.
  *
  */
-export declare function groupedGraph(G: any, rankSets: any): Graph;
+export declare function groupedGraph(G: SankeyGraph, rankSets: RankSet[]): SankeyGraph;

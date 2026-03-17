@@ -1,6 +1,5 @@
 import { SankeyOptions } from './Options';
-import { Element, Svg } from '@svgdotjs/svg.js';
-import { ChartContext } from '../../../../graph-utils/src/index.ts';
+import { ChartContext, SvgCanvas as Svg, WrappedEl } from '../../../../graph-utils/src/index.ts';
 
 export declare class Paper {
     element: HTMLElement;
@@ -9,7 +8,7 @@ export declare class Paper {
     canvas: Svg;
     constructor(element: HTMLElement, options: SankeyOptions, chartContext: ChartContext);
     private getYShift;
-    add(element: Element): void;
+    add(element: WrappedEl): void;
     clear(): void;
     exportToSvg(): void;
     resetViewBox(): void;

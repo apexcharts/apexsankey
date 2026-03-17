@@ -1,3 +1,13 @@
-import { Graph } from 'graphlib';
+import { SankeyGraph } from './types';
 
-export declare function createGraph(nodes?: any[], edges?: any[]): Graph;
+interface InputEdge {
+    source: string;
+    target: string;
+    type: string;
+}
+interface InputNode {
+    id: string;
+    direction?: string;
+}
+export declare function createGraph(nodes?: InputNode[], edges?: InputEdge[]): SankeyGraph;
+export {};

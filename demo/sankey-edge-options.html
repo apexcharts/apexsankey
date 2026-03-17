@@ -5,11 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&display=swap" rel="stylesheet" />
-    <script src="https://cdn.jsdelivr.net/npm/@svgdotjs/svg.js"></script>
     <script src="../apexsankey.min.js"></script>
   </head>
   <body>
-    <div id="svg-sankey" style="width: 800px; height: 700px; margin: 0 auto"></div>
+    <div id="svg-sankey" style="margin: 0 auto"></div>
     <script>
       const data = {
         nodes: [
@@ -97,6 +96,8 @@
         fontFamily: 'Quicksand, sans-serif',
         fontWeight: '600',
         edgeOpacity: 0.2,
+        width: 800,
+        height: 600,
       };
       const s = new ApexSankey(document.getElementById('svg-sankey'), graphOptions);
       s.render(data);

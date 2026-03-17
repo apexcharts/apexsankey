@@ -1,4 +1,5 @@
-/** @module edge-ordering */
+import { SankeyGraph } from '../types';
+
 /**
  * Assign incoming and outgoing edge lists to each node.
  *
@@ -8,6 +9,6 @@
  * @param {Graph} G - The graph. Nodes must have `x` and `y` attributes.
  *
  */
-export declare function orderEdges(G: any, { alignLinkTypes }?: {
-    alignLinkTypes?: boolean;
+export declare function orderEdges(G: SankeyGraph, { alignLinkTypes: _alignLinkTypes }?: {
+    alignLinkTypes?: boolean | undefined;
 }): void;

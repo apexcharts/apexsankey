@@ -1,4 +1,5 @@
-/** @module node-ordering */
+import { SankeyGraph } from '../types';
+
 /**
  * Return an ordering for the graph G.
  *
@@ -8,4 +9,4 @@
  * @param {Graph} G - The graph. Nodes must have a `rank` attribute.
  *
  */
-export declare function ordering(G: any, maxIterations?: number): any[];
+export declare function ordering(G: SankeyGraph, maxIterations?: number): string[][][];

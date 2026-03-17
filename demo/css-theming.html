@@ -1,0 +1,438 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ApexSankey – CSS Custom Property Theming</title>
+    <script src="../apexsankey.min.js"></script>
+    <style>
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: system-ui, sans-serif;
+        background: #f0f4f8;
+        color: #1a202c;
+        min-height: 100vh;
+        transition:
+          background 0.3s,
+          color 0.3s;
+      }
+
+      body[data-theme='dark'] {
+        background: #0d1117;
+        color: #e0e0e0;
+      }
+
+      .page-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 20px 32px;
+        background: #ffffff;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        transition: background 0.3s;
+      }
+
+      body[data-theme='dark'] .page-header {
+        background: #161b22;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+      }
+
+      .page-header h1 {
+        font-size: 1.25rem;
+        font-weight: 600;
+      }
+
+      .page-header h1 span {
+        color: #68d391;
+      }
+
+      .theme-toggle {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        cursor: pointer;
+        padding: 8px 16px;
+        border: 1.5px solid #cbd5e0;
+        border-radius: 8px;
+        background: transparent;
+        font: inherit;
+        font-size: 0.9rem;
+        color: inherit;
+        transition:
+          border-color 0.2s,
+          background 0.2s;
+      }
+
+      .theme-toggle:hover {
+        background: rgba(104, 211, 145, 0.1);
+        border-color: #68d391;
+      }
+
+      .content {
+        max-width: 1100px;
+        margin: 32px auto;
+        padding: 0 24px;
+        display: flex;
+        flex-direction: column;
+        gap: 32px;
+      }
+
+      .demo-section {
+        background: #ffffff;
+        border-radius: 12px;
+        padding: 24px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        transition:
+          background 0.3s,
+          box-shadow 0.3s;
+      }
+
+      body[data-theme='dark'] .demo-section {
+        background: #161b22;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+      }
+
+      .demo-section h2 {
+        font-size: 1rem;
+        font-weight: 600;
+        margin-bottom: 6px;
+      }
+
+      .demo-section p {
+        font-size: 0.875rem;
+        color: #718096;
+        margin-bottom: 20px;
+        line-height: 1.6;
+      }
+
+      body[data-theme='dark'] .demo-section p {
+        color: #8b9cbf;
+      }
+
+      .chart-wrapper {
+        border-radius: 8px;
+        overflow: hidden;
+        border: 1px solid #e2e8f0;
+        transition:
+          border-color 0.3s,
+          background 0.3s;
+      }
+
+      body[data-theme='dark'] .chart-wrapper {
+        border-color: #30363d;
+        background: #0d1117;
+      }
+
+      code {
+        font-family: 'Fira Code', monospace;
+        font-size: 0.8rem;
+        background: #f7fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 6px;
+        padding: 14px 18px;
+        display: block;
+        overflow-x: auto;
+        line-height: 1.7;
+        white-space: pre;
+        transition:
+          background 0.3s,
+          border-color 0.3s;
+      }
+
+      body[data-theme='dark'] code {
+        background: #0d1117;
+        border-color: #30363d;
+        color: #c9d1d9;
+      }
+
+      .token-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 10px;
+        margin-top: 16px;
+      }
+
+      .token-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 14px;
+        background: #f7fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        font-size: 0.8rem;
+        transition:
+          background 0.3s,
+          border-color 0.3s;
+      }
+
+      body[data-theme='dark'] .token-item {
+        background: #1c2128;
+        border-color: #30363d;
+        color: #c9d1d9;
+      }
+
+      .token-swatch {
+        width: 20px;
+        height: 20px;
+        border-radius: 4px;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        flex-shrink: 0;
+      }
+
+      .token-name {
+        font-family: monospace;
+        color: #38a169;
+        font-size: 0.75rem;
+      }
+
+      body[data-theme='dark'] .token-name {
+        color: #68d391;
+      }
+
+      /* ── CSS Custom Property Theming tokens ─────────────────────── */
+      #sankey-live {
+        --apex-sankey-edge-opacity: 0.5;
+        --apex-sankey-edge-gradient: true;
+        --apex-sankey-label-color: #2d3748;
+        --apex-sankey-label-font-size: 12px;
+        --apex-sankey-font-family: system-ui, sans-serif;
+        --apex-sankey-node-width: 16;
+        --apex-sankey-node-border-color: transparent;
+        --apex-sankey-node-border-width: 0;
+        --apex-sankey-tooltip-bg: #ffffff;
+        --apex-sankey-tooltip-border-color: #e2e8f0;
+      }
+
+      body[data-theme='dark'] #sankey-live {
+        --apex-sankey-edge-opacity: 0.4;
+        --apex-sankey-label-color: #c9d1d9;
+        --apex-sankey-tooltip-bg: #161b22;
+        --apex-sankey-tooltip-border-color: #30363d;
+      }
+
+      /* ── prefers-color-scheme: dark (no JS required) ────────────── */
+      @media (prefers-color-scheme: dark) {
+        #sankey-os-dark {
+          --apex-sankey-edge-opacity: 0.4;
+          --apex-sankey-edge-gradient: true;
+          --apex-sankey-label-color: #c9d1d9;
+          --apex-sankey-label-font-size: 12px;
+          --apex-sankey-font-family: system-ui, sans-serif;
+          --apex-sankey-node-width: 16;
+          --apex-sankey-node-border-color: transparent;
+          --apex-sankey-node-border-width: 0;
+          --apex-sankey-tooltip-bg: #161b22;
+          --apex-sankey-tooltip-border-color: #30363d;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- ── Header ─────────────────────────────────────────────────── -->
+    <header class="page-header">
+      <h1>ApexSankey — <span>CSS Custom Property Theming</span></h1>
+      <button class="theme-toggle" onclick="toggleTheme()">
+        <span id="themeIcon">🌙</span>
+        <span id="themeLabel">Switch to Dark Mode</span>
+      </button>
+    </header>
+
+    <main class="content">
+      <!-- ── 1. Live Toggle Demo ────────────────────────────────────── -->
+      <section class="demo-section">
+        <h2>🎨 Live Theme Toggle</h2>
+        <p>
+          Use the toggle in the header to switch between light and dark mode. The Sankey diagram responds to CSS custom
+          properties defined on its container element — no JavaScript options are changed.
+        </p>
+        <div class="chart-wrapper">
+          <div id="sankey-live" style="width: 100%; height: 420px"></div>
+        </div>
+      </section>
+
+      <!-- ── 2. OS Dark Mode Demo (no JS) ─────────────────────────── -->
+      <section class="demo-section">
+        <h2>🌑 Dark Mode via <code style="display: inline; padding: 2px 6px">prefers-color-scheme</code> (no JS)</h2>
+        <p>
+          This chart is themed entirely via a CSS
+          <code style="display: inline; padding: 2px 6px">@media (prefers-color-scheme: dark)</code>
+          block — no JavaScript required. Switch your OS appearance to dark mode to see it update automatically.
+        </p>
+        <div class="chart-wrapper">
+          <div id="sankey-os-dark" style="width: 100%; height: 420px"></div>
+        </div>
+      </section>
+
+      <!-- ── 3. Code snippet ─────────────────────────────────────── -->
+      <section class="demo-section">
+        <h2>📋 How it works</h2>
+        <p>
+          Set CSS custom properties on the container element (or any ancestor) to override the default JS option values.
+          The chart reads these at render time.
+        </p>
+        <code
+          >/* Light mode tokens on the container */ #my-sankey { --apex-sankey-edge-opacity: 0.5;
+          --apex-sankey-edge-gradient: true; --apex-sankey-label-color: #2d3748; --apex-sankey-label-font-size: 12px;
+          --apex-sankey-font-family: system-ui, sans-serif; --apex-sankey-node-width: 16;
+          --apex-sankey-node-border-color: transparent; --apex-sankey-node-border-width: 0; --apex-sankey-tooltip-bg:
+          #ffffff; --apex-sankey-tooltip-border-color: #e2e8f0; } /* Dark mode — via OS preference (no JS required) */
+          @media (prefers-color-scheme: dark) { #my-sankey { --apex-sankey-edge-opacity: 0.4; --apex-sankey-label-color:
+          #c9d1d9; --apex-sankey-tooltip-bg: #161b22; --apex-sankey-tooltip-border-color: #30363d; } } /* Dark mode —
+          via a manual [data-theme] toggle */ [data-theme="dark"] #my-sankey { --apex-sankey-edge-opacity: 0.4;
+          --apex-sankey-label-color: #c9d1d9; --apex-sankey-tooltip-bg: #161b22; --apex-sankey-tooltip-border-color:
+          #30363d; }</code
+        >
+      </section>
+
+      <!-- ── 3. Token Reference ───────────────────────────────────── -->
+      <section class="demo-section">
+        <h2>📖 Token Reference</h2>
+        <p>All supported CSS custom properties for ApexSankey.</p>
+        <div class="token-grid">
+          <div class="token-item">
+            <div class="token-swatch" style="background: rgba(100, 160, 255, 0.5)"></div>
+            <div>
+              <div class="token-name">--apex-sankey-edge-opacity</div>
+              <div>Flow edge opacity (0–1, default 0.4)</div>
+            </div>
+          </div>
+          <div class="token-item">
+            <div class="token-swatch" style="background: transparent; border-style: dashed"></div>
+            <div>
+              <div class="token-name">--apex-sankey-edge-gradient</div>
+              <div>Edge gradient fill ('true'/'false', default true)</div>
+            </div>
+          </div>
+          <div class="token-item">
+            <div class="token-swatch" style="background: #2d3748"></div>
+            <div>
+              <div class="token-name">--apex-sankey-label-color</div>
+              <div>Node label text color</div>
+            </div>
+          </div>
+          <div class="token-item">
+            <div class="token-swatch" style="background: transparent; border-style: dashed"></div>
+            <div>
+              <div class="token-name">--apex-sankey-label-font-size</div>
+              <div>Node label font size (e.g. 12px)</div>
+            </div>
+          </div>
+          <div class="token-item">
+            <div class="token-swatch" style="background: transparent; border-style: dashed"></div>
+            <div>
+              <div class="token-name">--apex-sankey-font-family</div>
+              <div>Font family for all labels</div>
+            </div>
+          </div>
+          <div class="token-item">
+            <div class="token-swatch" style="background: transparent; border-style: dashed"></div>
+            <div>
+              <div class="token-name">--apex-sankey-node-width</div>
+              <div>Node rectangle width in px (default 20)</div>
+            </div>
+          </div>
+          <div class="token-item">
+            <div class="token-swatch" style="background: transparent; border: 2px solid #a0aec0"></div>
+            <div>
+              <div class="token-name">--apex-sankey-node-border-color</div>
+              <div>Node border color (default: node color)</div>
+            </div>
+          </div>
+          <div class="token-item">
+            <div class="token-swatch" style="background: transparent; border-style: dashed"></div>
+            <div>
+              <div class="token-name">--apex-sankey-node-border-width</div>
+              <div>Node border width in px (default 1)</div>
+            </div>
+          </div>
+          <div class="token-item">
+            <div class="token-swatch" style="background: #ffffff; border: 1px solid #e2e8f0"></div>
+            <div>
+              <div class="token-name">--apex-sankey-tooltip-bg</div>
+              <div>Tooltip background color (default #FFFFFF)</div>
+            </div>
+          </div>
+          <div class="token-item">
+            <div class="token-swatch" style="background: #bcbcbc"></div>
+            <div>
+              <div class="token-name">--apex-sankey-tooltip-border-color</div>
+              <div>Tooltip border color (default #BCBCBC)</div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      // ── Sankey data — energy flow diagram ───────────────────────
+      const sankeyData = {
+        nodes: [
+          {id: 'Solar', title: 'Solar'},
+          {id: 'Wind', title: 'Wind'},
+          {id: 'Grid', title: 'Grid'},
+          {id: 'Battery', title: 'Battery'},
+          {id: 'Home', title: 'Home'},
+          {id: 'EV', title: 'EV Charging'},
+          {id: 'Export', title: 'Grid Export'},
+          {id: 'Lighting', title: 'Lighting'},
+          {id: 'Appliances', title: 'Appliances'},
+          {id: 'Heating', title: 'Heating'},
+        ],
+        edges: [
+          {source: 'Solar', target: 'Battery', value: 30},
+          {source: 'Solar', target: 'Home', value: 45},
+          {source: 'Solar', target: 'Export', value: 15},
+          {source: 'Wind', target: 'Grid', value: 60},
+          {source: 'Grid', target: 'Home', value: 25},
+          {source: 'Grid', target: 'EV', value: 20},
+          {source: 'Battery', target: 'Home', value: 20},
+          {source: 'Battery', target: 'EV', value: 10},
+          {source: 'Home', target: 'Lighting', value: 20},
+          {source: 'Home', target: 'Appliances', value: 40},
+          {source: 'Home', target: 'Heating', value: 30},
+        ],
+        options: {},
+      };
+
+      const sankeyOptions = {
+        width: 800,
+        height: 420,
+        nodeWidth: 14,
+        edgeGradientFill: true,
+        enableTooltip: true,
+        enableToolbar: false,
+      };
+
+      // ── Instantiate charts ────────────────────────────────────────
+      const sankey = new ApexSankey(document.getElementById('sankey-live'), sankeyOptions);
+      sankey.render(sankeyData);
+
+      const sankeyOsDark = new ApexSankey(document.getElementById('sankey-os-dark'), sankeyOptions);
+      sankeyOsDark.render(sankeyData);
+
+      // ── Theme toggle logic ────────────────────────────────────────
+      function toggleTheme() {
+        const isDark = document.body.getAttribute('data-theme') === 'dark';
+        if (isDark) {
+          document.body.removeAttribute('data-theme');
+          document.getElementById('themeIcon').textContent = '🌙';
+          document.getElementById('themeLabel').textContent = 'Switch to Dark Mode';
+        } else {
+          document.body.setAttribute('data-theme', 'dark');
+          document.getElementById('themeIcon').textContent = '☀️';
+          document.getElementById('themeLabel').textContent = 'Switch to Light Mode';
+        }
+        // Re-render so the chart picks up the new CSS vars
+        sankey.render(sankeyData);
+      }
+    </script>
+  </body>
+</html>

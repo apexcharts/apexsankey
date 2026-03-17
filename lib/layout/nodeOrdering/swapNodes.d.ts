@@ -1,1 +1,3 @@
-export declare function swapNodes(G: any, order: any): void;
+import { SankeyGraph } from '../types';
+
+export declare function swapNodes(G: SankeyGraph, order: string[][]): void;
