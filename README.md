@@ -44,7 +44,7 @@ To create a basic sankey with minimal configuration, write as follows:
     nodeWidth: 20,
  };
  const sankey = new ApexSankey(document.getElementById('sankey-container'), options);
- const graph = sankey.render(data);
+ const graph = sankey.render({ nodes: data.nodes, edges: data.edges, options: sankey.options });
 ```
 
 ## Setting the License
@@ -63,32 +63,41 @@ const graph = sankey.render(data);
 
 ## ApexSankey Options
 
-The layout can be configured by either setting the properties in the table below by passing a second arg to ApexSankey with these properties set. The latter takes precedence.
+The layout can be configured by passing a second argument to `ApexSankey` with the properties listed below.
 
-| Options | Default | Description |
-| --- | --- | --- |
-| width | 800 | The width of graph container |
-| height | 800 | The height of graph container |
-| canvasStyle | None | The css styles for canvas root container |
-| spacing | 100 | The spacing from top and left of graph container |
-| nodeWidth | 20 | The width of graph nodes |
-| nodeBorderWidth | 1 | The border width of the nodes in pixels |
-| nodeBorderColor | none | The border color of the nodes |
-| onNodeClick | empty function | The callback function for node click. Node object will be parameter for callback. |
-| edgeOpacity | 0.4 | The opacity value for edges. Values must be between 0 to 1 and in fraction. |
-| edgeGradientFill | true | Enable gradient fill based on source and target node colors. |
-| edgeGap | 2 | The gap in pixels between edges at node connection points. |
-| whitespace | 0.18 | Fraction of vertical space used for margins between nodes (0-1). Lower values make nodes taller. |
-| enableTooltip | false | Enable tooltip on hover of nodes |
-| enableToolbar | false | Enable/disable graph toolbar |
-| tooltipId | `sankey-tooltip-container` | The tooltip HTML element id |
-| tooltipTemplate | tooltipTemplate | The HTML template for tooltip |
-| tooltipBorderColor | `#BCBCBC` | The border color of tooltip |
-| tooltipBGColor | `#FFFFFF` | The background color of tooltip |
-| fontSize | `14px` | The size of font of nodes |
-| fontFamily | None | The font family of nodes |
-| fontWeight | 400 | The font weight of nodes |
-| fontColor | `#000000` | The font color of nodes |
+| Option | Type | Default | Description |
+| --- | --- | --- | --- |
+| `width` | `number \| string` | `'100%'` | Width of the canvas. Accepts a pixel number or CSS percentage string. |
+| `height` | `number \| string` | `'auto'` | Height of the canvas. `'auto'` derives height from width at a 1.6:1 ratio. |
+| `canvasStyle` | `string` | built-in border | Arbitrary CSS injected onto the SVG root container element. |
+| `spacing` | `number` | `20` | Horizontal spacing between node columns in pixels. |
+| `nodeWidth` | `number` | `20` | Width of each node rectangle in pixels. |
+| `nodeBorderWidth` | `number` | `1` | Border width of each node in pixels. |
+| `nodeBorderColor` | `string \| null` | `null` | CSS color for the node border. `null` disables the border. |
+| `onNodeClick` | `(node: SankeyNode) => void` | `undefined` | Callback fired when the user clicks a node. |
+| `edgeOpacity` | `number` | `0.4` | Opacity of edges (0–1). |
+| `edgeGradientFill` | `boolean` | `true` | Fill edges with a gradient between source and target node colors. |
+| `edgeGap` | `number` | `2` | Gap in pixels between adjacent edges at node connection points. |
+| `whitespace` | `number` | `0.18` | Fraction of vertical space used as margins between nodes (0–1). Lower = taller nodes. |
+| `viewPortWidth` | `number` | `800` | Internal SVG viewport width in pixels. |
+| `viewPortHeight` | `number` | `500` | Internal SVG viewport height in pixels. |
+| `highlightConnectedPath` | `boolean` | `true` | Highlight the connected flow path when hovering a node or edge. |
+| `dimOpacity` | `number` | `0.15` | Opacity for dimmed (unrelated) elements when path highlighting is active. |
+| `animation` | `{ enabled: boolean, duration: number }` | `{ enabled: true, duration: 800 }` | Entrance animation. Automatically disabled when `prefers-reduced-motion` is set. |
+| `enableTooltip` | `boolean` | `true` | Show edge tooltips on hover. |
+| `enableToolbar` | `boolean` | `true` | Show the zoom/pan toolbar. |
+| `tooltipId` | `string` | `'apexsankey-tooltip-container'` | HTML `id` for the tooltip container element. |
+| `tooltipTemplate` | `(content: TooltipContent) => string` | built-in | Custom function returning an HTML string for the edge (source→target) tooltip. |
+| `nodeTooltipTemplate` | `(content: NodeTooltipContent) => string` | built-in | Custom function returning an HTML string for the per-node tooltip. |
+| `tooltipTheme` | `'light' \| 'dark'` | `undefined` | Overrides `tooltipBGColor`/`tooltipBorderColor`/`tooltipFontColor` with a preset. |
+| `tooltipBorderColor` | `string` | `'#E2E8F0'` | Border color of the tooltip. |
+| `tooltipBGColor` | `string` | `'#FFFFFF'` | Background color of the tooltip. |
+| `tooltipFontColor` | `string` | `'#1a1a1a'` | Font color inside the tooltip. |
+| `fontColor` | `string` | `'#212121'` | CSS color for node labels. |
+| `fontFamily` | `string` | `''` | CSS font-family for node labels. Falls back to the page default when empty. |
+| `fontSize` | `string` | `'14px'` | CSS font-size for node labels. |
+| `fontWeight` | `string` | `'400'` | CSS font-weight for node labels. |
+| `a11y` | `{ enabled?: boolean, diagramLabel?: string, description?: string }` | `{ enabled: true }` | WCAG 2.1 AA accessibility options. |
 
 Default tooltip template
 
@@ -115,8 +124,9 @@ Passed data should be an object containing nodes, edges and options. Nodes, edge
 
 ```json
 {
-  "id": "1", // required
-  "title": "A" // required
+  "id": "1",     // required
+  "title": "A",  // required
+  "color": "#e74c3c" // optional — overrides the auto-assigned palette color
 }
 ```
 

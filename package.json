@@ -1,6 +1,6 @@
 {
   "name": "apexsankey",
-  "version": "1.6.0",
+  "version": "1.7.0",
   "dependencies": {},
   "repository": {
     "type": "git",
@@ -9,16 +9,16 @@
   "type": "module",
   "main": "./apexsankey.min.js",
   "module": "./apexsankey.es.min.js",
-  "types": "./index.d.ts",
+  "types": "./apexsankey.d.ts",
   "license": "See LICENSE in LICENSE",
   "exports": {
     ".": {
       "import": {
-        "types": "./index.d.ts",
+        "types": "./apexsankey.d.ts",
         "default": "./apexsankey.es.min.js"
       },
       "require": {
-        "types": "./index.d.ts",
+        "types": "./apexsankey.d.ts",
         "default": "./apexsankey.min.js"
       }
     }
