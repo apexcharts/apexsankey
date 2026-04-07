@@ -44,7 +44,7 @@ To create a basic sankey with minimal configuration, write as follows:
     nodeWidth: 20,
  };
  const sankey = new ApexSankey(document.getElementById('sankey-container'), options);
- const graph = sankey.render({ nodes: data.nodes, edges: data.edges, options: sankey.options });
+ const graph = sankey.render(data);
 ```
 
 ## Setting the License
@@ -82,7 +82,7 @@ The layout can be configured by passing a second argument to `ApexSankey` with t
 | `viewPortWidth` | `number` | `800` | Internal SVG viewport width in pixels. |
 | `viewPortHeight` | `number` | `500` | Internal SVG viewport height in pixels. |
 | `highlightConnectedPath` | `boolean` | `true` | Highlight the connected flow path when hovering a node or edge. |
-| `dimOpacity` | `number` | `0.15` | Opacity for dimmed (unrelated) elements when path highlighting is active. |
+| `dimOpacity` | `number` | `0.2` | Opacity for dimmed (unrelated) elements when path highlighting is active. |
 | `animation` | `{ enabled: boolean, duration: number }` | `{ enabled: true, duration: 800 }` | Entrance animation. Automatically disabled when `prefers-reduced-motion` is set. |
 | `enableTooltip` | `boolean` | `true` | Show edge tooltips on hover. |
 | `enableToolbar` | `boolean` | `true` | Show the zoom/pan toolbar. |
@@ -124,9 +124,8 @@ Passed data should be an object containing nodes, edges and options. Nodes, edge
 
 ```json
 {
-  "id": "1",     // required
-  "title": "A",  // required
-  "color": "#e74c3c" // optional — overrides the auto-assigned palette color
+  "id": "1", // required
+  "title": "A" // required
 }
 ```
 
