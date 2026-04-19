@@ -3,98 +3,110 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&display=swap" rel="stylesheet" />
+    <title>Per-Node Colors - Website Traffic</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
     <script src="../apexsankey.min.js"></script>
+    <style>
+      body {
+        max-width: 1000px;
+        margin: 0 auto;
+        font-family: 'Inter', sans-serif;
+        background: #fff;
+        padding: 20px 0;
+      }
+      h2 {
+        font-size: 22px;
+        font-weight: 700;
+        color: #1a1a2e;
+        margin: 0 0 4px 0;
+        line-height: 1.3;
+      }
+      .subtitle {
+        font-size: 13px;
+        color: #888;
+        margin-bottom: 16px;
+      }
+    </style>
   </head>
   <body>
-    <div id="svg-sankey" style="margin: 0 auto"></div>
+    <h2>Website Traffic Flow</h2>
+    <p class="subtitle">
+      Per-node color overrides to visually group traffic sources, pages, and outcomes using the
+      <code>color</code> property on each node
+    </p>
+    <div id="svg-sankey"></div>
     <script>
       const data = {
         nodes: [
-          {
-            id: 'John',
-            title: 'John',
-          },
-          {
-            id: 'Raoul',
-            title: 'Raoul',
-          },
-          {
-            id: 'Jane',
-            title: 'Jane',
-          },
-          {
-            id: 'Marcel',
-            title: 'Marcel',
-          },
-          {
-            id: 'Ibrahim',
-            title: 'Ibrahim',
-          },
-          {
-            id: 'Junko',
-            title: 'Junko',
-          },
+          // Sources — blue tones
+          {id: 'Google Search', title: 'Google Search', color: '#4285F4'},
+          {id: 'Social Media', title: 'Social Media', color: '#E1306C'},
+          {id: 'Direct', title: 'Direct', color: '#6366F1'},
+          {id: 'Email', title: 'Email Campaigns', color: '#0EA5E9'},
+          {id: 'Referral', title: 'Referral Sites', color: '#8B5CF6'},
+          // Pages — warm tones
+          {id: 'Homepage', title: 'Homepage', color: '#F97316'},
+          {id: 'Blog', title: 'Blog', color: '#F59E0B'},
+          {id: 'Product', title: 'Product Pages', color: '#EF4444'},
+          {id: 'Pricing', title: 'Pricing', color: '#EC4899'},
+          {id: 'Docs', title: 'Documentation', color: '#D946EF'},
+          // Outcomes — green/neutral tones
+          {id: 'Sign Up', title: 'Sign Up', color: '#10B981'},
+          {id: 'Purchase', title: 'Purchase', color: '#059669'},
+          {id: 'Bounce', title: 'Bounce', color: '#94A3B8'},
+          {id: 'Support', title: 'Contact Support', color: '#14B8A6'},
         ],
         edges: [
-          {
-            source: 'Marcel',
-            target: 'Ibrahim',
-            value: 72,
-          },
-          {
-            source: 'Marcel',
-            target: 'Raoul',
-            value: 155,
-          },
-          {
-            source: 'Raoul',
-            target: 'John',
-            value: 109,
-          },
-          {
-            source: 'Raoul',
-            target: 'Ibrahim',
-            value: 100,
-          },
-          {
-            source: 'Ibrahim',
-            target: 'Jane',
-            value: 100,
-          },
-          {
-            source: 'Ibrahim',
-            target: 'Junko',
-            value: 127,
-          },
-          {
-            source: 'Ibrahim',
-            target: 'John',
-            value: 67,
-          },
-          {
-            source: 'Junko',
-            target: 'Jane',
-            value: 140,
-          },
-          {
-            source: 'Junko',
-            target: 'John',
-            value: 93,
-          },
+          {source: 'Google Search', target: 'Homepage', value: 4200},
+          {source: 'Google Search', target: 'Blog', value: 3800},
+          {source: 'Google Search', target: 'Product', value: 2100},
+          {source: 'Google Search', target: 'Docs', value: 1400},
+          {source: 'Social Media', target: 'Homepage', value: 2800},
+          {source: 'Social Media', target: 'Blog', value: 1900},
+          {source: 'Social Media', target: 'Product', value: 800},
+          {source: 'Direct', target: 'Homepage', value: 3100},
+          {source: 'Direct', target: 'Pricing', value: 1600},
+          {source: 'Direct', target: 'Product', value: 1200},
+          {source: 'Email', target: 'Product', value: 1800},
+          {source: 'Email', target: 'Pricing', value: 900},
+          {source: 'Email', target: 'Blog', value: 600},
+          {source: 'Referral', target: 'Blog', value: 1100},
+          {source: 'Referral', target: 'Homepage', value: 700},
+          {source: 'Referral', target: 'Docs', value: 500},
+          {source: 'Homepage', target: 'Sign Up', value: 3200},
+          {source: 'Homepage', target: 'Bounce', value: 5400},
+          {source: 'Homepage', target: 'Support', value: 2200},
+          {source: 'Blog', target: 'Sign Up', value: 2100},
+          {source: 'Blog', target: 'Bounce', value: 4500},
+          {source: 'Blog', target: 'Support', value: 800},
+          {source: 'Product', target: 'Purchase', value: 2400},
+          {source: 'Product', target: 'Sign Up', value: 1800},
+          {source: 'Product', target: 'Bounce', value: 1700},
+          {source: 'Pricing', target: 'Purchase', value: 1500},
+          {source: 'Pricing', target: 'Bounce', value: 1000},
+          {source: 'Docs', target: 'Support', value: 900},
+          {source: 'Docs', target: 'Sign Up', value: 600},
+          {source: 'Docs', target: 'Bounce', value: 400},
         ],
       };
-      const graphOptions = {
-        width: 800,
-        fontFamily: 'Quicksand, sans-serif',
-        fontWeight: '600',
-        nodeWidth: 5,
-        nodeBorderWidth: 2,
-        nodeBorderColor: '#111',
-        edgeGradientFill: false,
+
+      const options = {
+        nodeWidth: 16,
+        fontFamily: 'Inter, sans-serif',
+        fontWeight: '500',
+        fontSize: '12px',
+        fontColor: '#334155',
+        width: '100%',
+        height: 560,
+        edgeGradientFill: true,
+        edgeOpacity: 0.3,
+        enableToolbar: true,
+        canvasStyle: 'border: 1px solid #e2e8f0; border-radius: 8px; background: #fafafa; box-sizing: border-box;',
       };
-      const s = new ApexSankey(document.getElementById('svg-sankey'), graphOptions);
+
+      const s = new ApexSankey(document.getElementById('svg-sankey'), options);
       s.render(data);
     </script>
   </body>

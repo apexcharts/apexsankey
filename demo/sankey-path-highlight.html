@@ -3,16 +3,17 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Sankey – Connected Path Highlight on Hover</title>
+    <title>Sankey - Connected Path Highlight on Hover</title>
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&display=swap" rel="stylesheet" />
     <script src="../apexsankey.min.js"></script>
     <style>
       body {
         font-family: 'Quicksand', sans-serif;
-        margin: 0;
+        margin: 0 auto;
         padding: 24px;
         background: #f5f6fa;
         color: #212121;
+        max-width: 1000px;
       }
 
       h1 {
@@ -37,7 +38,6 @@
         border-radius: 8px;
         padding: 16px 20px;
         margin-bottom: 20px;
-        max-width: 860px;
       }
 
       .control-group {
@@ -159,7 +159,7 @@
           fontFamily: 'Quicksand, sans-serif',
           fontWeight: '600',
           height: 520,
-          width: 860,
+          width: '100%',
           edgeOpacity: 0.4,
           enableToolbar: false,
           highlightConnectedPath: highlightEnabled,
