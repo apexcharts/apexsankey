@@ -48,7 +48,7 @@ export declare interface AnimationOptions {
 }
 
 declare class ApexSankey extends BaseChart {
-    graph: SankeyGraph;
+    graph: SankeyGraphRenderer;
     options: SankeyOptions;
     /**
      * Create a new ApexSankey instance.
@@ -98,7 +98,7 @@ declare class ApexSankey extends BaseChart {
      *   - `edges` — array of `{ source, target, value, type }` objects representing
      *     flow connections between nodes. `value` determines link width.
      *   - `options` — the full resolved `SankeyOptions` for this render.
-     * @returns The internal `SankeyGraph` instance, which exposes `exportToSvg()`
+     * @returns The internal `SankeyGraphRenderer` instance, which exposes `exportToSvg()`
      *   for programmatic SVG export after render.
      *
      * @throws {Error} If the container element is not found.
@@ -117,7 +117,7 @@ declare class ApexSankey extends BaseChart {
      * });
      * ```
      */
-    render(data: GraphData): SankeyGraph;
+    render(data: GraphData): SankeyGraphRenderer;
 }
 export { ApexSankey }
 export default ApexSankey;
@@ -342,27 +342,8 @@ declare class Paper {
     get width(): number;
 }
 
-declare class SankeyGraph extends Paper {
-    graph: SankeyGraph_2;
-    maxRank: number;
-    /** Options resolved with CSS custom property overrides for the current render pass. */
-    private renderOptions;
-    /** Accessibility helper — re-created on each render pass. */
-    private a11yHelper;
-    /** Path highlighter — re-created on each render pass when feature is enabled. */
-    private pathHighlighter;
-    /** Guard: entrance animation plays only on the first render. */
-    private _hasAnimated;
-    constructor(element: HTMLElement, options: SankeyOptions, chartContext: ChartContext);
-    construct(data: GraphData): void;
-    render({ keepOldPosition }?: {
-        keepOldPosition?: boolean | undefined;
-    }): void;
-    renderEdge(edgeObj: GraphEdge, group: G): void;
-}
-
 /** Generic graph interface for layout algorithms that only need basic traversal. */
-declare interface SankeyGraph_2 {
+declare interface SankeyGraph {
     nodes(): string[];
     node(id: string): NodeLabel;
     setNode(id: string, label: NodeLabel): void;
@@ -412,6 +393,25 @@ export declare interface SankeyGraphNode {
     readonly id: string;
     /** Display label rendered beside or inside the node. */
     readonly title: string;
+}
+
+declare class SankeyGraphRenderer extends Paper {
+    graph: SankeyGraph;
+    maxRank: number;
+    /** Options resolved with CSS custom property overrides for the current render pass. */
+    private renderOptions;
+    /** Accessibility helper — re-created on each render pass. */
+    private a11yHelper;
+    /** Path highlighter — re-created on each render pass when feature is enabled. */
+    private pathHighlighter;
+    /** Guard: entrance animation plays only on the first render. */
+    private _hasAnimated;
+    constructor(element: HTMLElement, options: SankeyOptions, chartContext: ChartContext);
+    construct(data: GraphData): void;
+    render({ keepOldPosition }?: {
+        keepOldPosition?: boolean | undefined;
+    }): void;
+    renderEdge(edgeObj: GraphEdge, group: G): void;
 }
 
 /** Data passed to the onNodeClick callback */
