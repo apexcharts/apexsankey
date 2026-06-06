@@ -179,7 +179,7 @@ declare interface EdgeLabel {
  * at each node connection point.
  */
 export declare interface EdgeOptions {
-    /** Gap in pixels between adjacent edges at their node connection points. @default 2 */
+    /** Gap in pixels between adjacent edges at their node connection points. @default 0 */
     readonly edgeGap: number;
     /** When true, edges are filled with a gradient between source and target node colors. @default true */
     readonly edgeGradientFill: boolean;

@@ -77,7 +77,7 @@ The layout can be configured by passing a second argument to `ApexSankey` with t
 | `onNodeClick` | `(node: SankeyNode) => void` | `undefined` | Callback fired when the user clicks a node. |
 | `edgeOpacity` | `number` | `0.4` | Opacity of edges (0–1). |
 | `edgeGradientFill` | `boolean` | `true` | Fill edges with a gradient between source and target node colors. |
-| `edgeGap` | `number` | `2` | Gap in pixels between adjacent edges at node connection points. |
+| `edgeGap` | `number` | `0` | Gap in pixels between adjacent edges at node connection points. |
 | `whitespace` | `number` | `0.18` | Fraction of vertical space used as margins between nodes (0–1). Lower = taller nodes. |
 | `viewPortWidth` | `number` | `800` | Internal SVG viewport width in pixels. |
 | `viewPortHeight` | `number` | `500` | Internal SVG viewport height in pixels. |
@@ -156,8 +156,6 @@ Passed data should be an object containing nodes, edges and options. Nodes, edge
         ],
     },
     ```
-
-  - _alignLinkTypes_: boolean (default false). Whether to align link types across nodes, or order links to minimise crossings.
 
 **Example**
 
