@@ -98,6 +98,27 @@ The layout can be configured by passing a second argument to `ApexSankey` with t
 | `fontSize` | `string` | `'14px'` | CSS font-size for node labels. |
 | `fontWeight` | `string` | `'400'` | CSS font-weight for node labels. |
 | `a11y` | `{ enabled?: boolean, diagramLabel?: string, description?: string }` | `{ enabled: true }` | WCAG 2.1 AA accessibility options. |
+| `locale` | `{ direction?: 'ltr' \| 'rtl' \| 'auto', messages?: Partial<SankeyMessages> }` | `{ direction: 'ltr' }` | Localization and text-direction. `direction: 'rtl'` mirrors the diagram horizontally (flows read right-to-left) and sets `dir="rtl"` on the container (`'auto'` defers to the document). `messages` overrides the screen-reader strings the diagram generates. |
+
+### Localization & RTL
+
+The diagram's screen-reader strings live in `SankeyMessages`; pass a `Partial<SankeyMessages>` via `locale.messages` to translate any subset (unset keys keep their English defaults, exported as `DEFAULT_SANKEY_MESSAGES`). Visible tooltips are localized separately via `tooltipTemplate` / `nodeTooltipTemplate`.
+
+| `SankeyMessages` key | Type | Description |
+| --- | --- | --- |
+| `diagramLabel` | `(ctx: SankeyDiagramLabelContext) => string` | SVG root aria-label summary (node/flow counts + largest flow). |
+| `nodeAriaLabel` | `(ctx: SankeyNodeLabelContext) => string` | Per-node aria-label (incoming/outgoing flow summary). |
+| `edgeAriaLabel` | `(ctx: SankeyEdgeLabelContext) => string` | Per-edge aria-label. Default: `Flow from {source} to {target}: {value} units`. |
+| `nodesGroupLabel` | `string` | aria-label for the `<g>` wrapping all nodes. Default: `'Sankey nodes'`. |
+
+```ts
+const sankey = new ApexSankey(el, {
+  locale: {
+    direction: 'rtl',
+    messages: {nodesGroupLabel: 'العقد'},
+  },
+});
+```
 
 Default tooltip template
 

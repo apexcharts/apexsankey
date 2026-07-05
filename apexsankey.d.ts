@@ -23,6 +23,8 @@ declare class WrappedEl {}
 
 
 
+declare type TextDirection = 'ltr' | 'rtl' | 'auto';
+
 
 
 /** Options for WCAG 2.1 AA accessibility support */
@@ -136,6 +138,8 @@ export declare interface CommonOptions {
     readonly enableToolbar: boolean;
     /** Height of the canvas. Use `'auto'` to derive height from width at a 1.6:1 ratio. @default 'auto' */
     readonly height: number | string;
+    /** Localization and text-direction (RTL) options. See {@link LocaleOptions}. @default { direction: 'ltr' } */
+    readonly locale?: LocaleOptions;
     /** Horizontal spacing between node columns in pixels. @default 20 */
     readonly spacing: number;
     /** Internal SVG viewport height in pixels. @default 500 */
@@ -145,6 +149,12 @@ export declare interface CommonOptions {
     /** Width of the canvas. Accepts a pixel number or CSS percentage string. @default '100%' */
     readonly width: number | string;
 }
+
+/**
+ * English defaults for every {@link SankeyMessages} string. These reproduce the
+ * exact screen-reader text the diagram generated before localization support.
+ */
+export declare const DEFAULT_SANKEY_MESSAGES: SankeyMessages;
 
 /** Label attached to a graph edge during the layout pipeline */
 declare interface EdgeLabel {
@@ -271,6 +281,24 @@ export declare interface LayoutOptions {
     readonly whitespace: number;
 }
 
+/**
+ * Localization and text-direction options.
+ *
+ * With the defaults (`direction: 'ltr'`, no message overrides) the output is
+ * byte-for-byte identical to builds that predate i18n support.
+ */
+export declare interface LocaleOptions {
+    /**
+     * Text and layout direction. `'rtl'` mirrors the diagram horizontally (flows
+     * read right-to-left) and sets `dir="rtl"` on the container; `'auto'` defers
+     * to the document/element direction.
+     * @default 'ltr'
+     */
+    readonly direction?: TextDirection;
+    /** Overrides for screen-reader strings. See {@link SankeyMessages}. */
+    readonly messages?: Partial<SankeyMessages>;
+}
+
 /** Shape of node user data attached to a graph node */
 export declare interface NodeData {
     id?: string;
@@ -342,6 +370,30 @@ declare class Paper {
     get width(): number;
 }
 
+/** Context passed to {@link SankeyMessages.diagramLabel}. */
+export declare interface SankeyDiagramLabelContext {
+    /** Number of (non-dummy) nodes in the diagram. */
+    readonly nodeCount: number;
+    /** Number of flows (edges). */
+    readonly flowCount: number;
+    /** The single largest flow, omitted when no value-bearing flow exists. */
+    readonly largestFlow?: {
+        readonly source: string;
+        readonly target: string;
+        readonly value: number;
+    };
+}
+
+/** Context passed to {@link SankeyMessages.edgeAriaLabel}. */
+export declare interface SankeyEdgeLabelContext {
+    /** Source node name. */
+    readonly source: string;
+    /** Target node name. */
+    readonly target: string;
+    /** Flow value. */
+    readonly value: number;
+}
+
 /** Generic graph interface for layout algorithms that only need basic traversal. */
 declare interface SankeyGraph {
     nodes(): string[];
@@ -406,12 +458,44 @@ declare class SankeyGraphRenderer extends Paper {
     private pathHighlighter;
     /** Guard: entrance animation plays only on the first render. */
     private _hasAnimated;
+    /** Resolved, localized screen-reader strings. */
+    private messages;
     constructor(element: HTMLElement, options: SankeyOptions, chartContext: ChartContext);
+    /** Resolved, localized screen-reader strings (English defaults + `locale.messages`). */
+    getMessages(): SankeyMessages;
+    /** Whether the current `locale.direction` resolves to right-to-left. */
+    private get isRtl();
     construct(data: GraphData): void;
+    /**
+     * Mirror the laid-out diagram horizontally so flows read right-to-left.
+     * Node centers and edge endpoints are reflected around a common axis (the
+     * midpoint of all node centers), which keeps every edge attached to the
+     * correct node face. Runs once per `construct`, so re-renders redraw the
+     * already-mirrored positions without compounding.
+     */
+    private mirrorLayoutForRtl;
     render({ keepOldPosition }?: {
         keepOldPosition?: boolean | undefined;
     }): void;
     renderEdge(edgeObj: GraphEdge, group: G): void;
+}
+
+/**
+ * Every user-facing string the Sankey diagram generates internally (the
+ * screen-reader summaries and group labels). Override any subset via
+ * {@link LocaleOptions.messages}; unset keys keep their English defaults
+ * ({@link DEFAULT_SANKEY_MESSAGES}). Visible tooltips are localized separately
+ * through `tooltipTemplate` / `nodeTooltipTemplate`.
+ */
+export declare interface SankeyMessages {
+    /** Builds the SVG root aria-label summary. */
+    readonly diagramLabel: (ctx: SankeyDiagramLabelContext) => string;
+    /** Builds an edge path's aria-label. */
+    readonly edgeAriaLabel: (ctx: SankeyEdgeLabelContext) => string;
+    /** Builds a node group's aria-label. */
+    readonly nodeAriaLabel: (ctx: SankeyNodeLabelContext) => string;
+    /** aria-label for the `<g>` wrapping all nodes. @default 'Sankey nodes' */
+    readonly nodesGroupLabel: string;
 }
 
 /** Data passed to the onNodeClick callback */
@@ -427,6 +511,22 @@ export declare interface SankeyNode {
     data?: NodeData | null;
 }
 
+/** Context passed to {@link SankeyMessages.nodeAriaLabel}. */
+export declare interface SankeyNodeLabelContext {
+    /** Resolved node display name. */
+    readonly name: string;
+    /** Incoming flow summary, omitted when the node has no incoming flows. */
+    readonly incoming?: {
+        readonly total: number;
+        readonly sources: readonly string[];
+    };
+    /** Outgoing flow summary, omitted when the node has no outgoing flows. */
+    readonly outgoing?: {
+        readonly total: number;
+        readonly targets: readonly string[];
+    };
+}
+
 /**
  * Full configuration type for `ApexSankey`. An intersection of all sub-option
  * interfaces: `CommonOptions & EdgeOptions & FontOptions & InteractionOptions &
@@ -435,6 +535,8 @@ export declare interface SankeyNode {
  * Pass a `Partial<SankeyOptions>` to the constructor — all fields have defaults.
  */
 export declare type SankeyOptions = CommonOptions & EdgeOptions & FontOptions & InteractionOptions & AnimationOptions & LayoutOptions & NodeOptions & TooltipOptions & A11yOptions;
+
+export { TextDirection }
 
 /** Data passed to the tooltipTemplate callback */
 export declare interface TooltipContent {

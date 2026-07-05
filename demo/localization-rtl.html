@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ApexSankey - Localization &amp; RTL</title>
+    <script src="../apexsankey.min.js"></script>
+    <style>
+      :root {
+        --ink: #1a1a2e;
+        --muted: #64748b;
+        --line: #e2e8f0;
+        --accent: #6366f1;
+        --accent-bg: #eef2ff;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        font-family: 'Segoe UI', Tahoma, system-ui, sans-serif;
+        margin: 0 auto;
+        padding: 24px;
+        max-width: 1040px;
+        color: var(--ink);
+        background: #fff;
+      }
+      h2 {
+        font-size: 22px;
+        margin: 0 0 4px;
+      }
+      .subtitle {
+        font-size: 13px;
+        color: var(--muted);
+        margin: 0;
+        line-height: 1.5;
+      }
+      .switcher {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin: 18px 0;
+      }
+      .lang-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        border: 1px solid var(--line);
+        background: #fff;
+        color: var(--ink);
+        padding: 8px 14px;
+        border-radius: 999px;
+        font-size: 14px;
+        cursor: pointer;
+        transition:
+          border-color 0.15s,
+          background 0.15s,
+          color 0.15s;
+      }
+      .lang-btn:hover {
+        border-color: var(--accent);
+      }
+      .lang-btn.active {
+        background: var(--accent-bg);
+        border-color: var(--accent);
+        color: var(--accent);
+        font-weight: 600;
+      }
+      .lang-btn .dir {
+        font-size: 10px;
+        letter-spacing: 0.5px;
+        opacity: 0.75;
+        border: 1px solid currentColor;
+        border-radius: 4px;
+        padding: 0 4px;
+      }
+      .legend {
+        margin-top: 14px;
+        font-size: 12.5px;
+        color: var(--muted);
+        line-height: 1.7;
+      }
+      .legend code {
+        background: #f1f5f9;
+        padding: 1px 5px;
+        border-radius: 3px;
+        font-size: 12px;
+      }
+      .legend b {
+        color: var(--ink);
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h2>Localization &amp; RTL</h2>
+      <p class="subtitle">
+        Pick a language to re-render the flow. For Arabic / Hebrew the layout mirrors so flows read right-to-left (<code
+          >locale.direction: 'rtl'</code
+        >); for every language the screen-reader summaries come from <code>locale.messages</code>. Node titles are
+        translated so the change is visible.
+      </p>
+    </header>
+
+    <div class="switcher" id="switcher"></div>
+
+    <div id="host"></div>
+
+    <p class="legend">
+      Localized here: the <b>diagram aria-summary</b>, <b>per-flow edge aria-labels</b>, and the
+      <b>nodes-group label</b> (open DevTools to inspect the SVG aria text), plus <b>RTL layout mirroring</b> for Arabic
+      / Hebrew. Defaults (no <code>locale</code>) stay English, left-to-right.
+    </p>
+
+    <script>
+      // titles: budget-flow node names, translated so the re-render is visually obvious.
+      // messages: the screen-reader strings ApexSankey exposes via locale.messages.
+      const LOCALES = {
+        en: {
+          label: 'English',
+          dir: 'ltr',
+          titles: {
+            income: 'Income',
+            housing: 'Housing',
+            food: 'Food',
+            savings: 'Savings',
+            rent: 'Rent',
+            groceries: 'Groceries',
+            investments: 'Investments',
+          },
+          messages: {
+            nodesGroupLabel: 'Sankey nodes',
+            diagramLabel: ({nodeCount, flowCount}) => `Sankey flow diagram: ${nodeCount} nodes, ${flowCount} flows`,
+            edgeAriaLabel: ({source, target, value}) => `Flow from ${source} to ${target}: ${value} units`,
+          },
+        },
+        fr: {
+          label: 'Français',
+          dir: 'ltr',
+          titles: {
+            income: 'Revenu',
+            housing: 'Logement',
+            food: 'Alimentation',
+            savings: 'Épargne',
+            rent: 'Loyer',
+            groceries: 'Courses',
+            investments: 'Investissements',
+          },
+          messages: {
+            nodesGroupLabel: 'Nœuds du diagramme',
+            diagramLabel: ({nodeCount, flowCount}) => `Diagramme de flux : ${nodeCount} nœuds, ${flowCount} flux`,
+            edgeAriaLabel: ({source, target, value}) => `Flux de ${source} vers ${target} : ${value} unités`,
+          },
+        },
+        ar: {
+          label: 'العربية',
+          dir: 'rtl',
+          titles: {
+            income: 'الدخل',
+            housing: 'السكن',
+            food: 'الطعام',
+            savings: 'المدخرات',
+            rent: 'الإيجار',
+            groceries: 'البقالة',
+            investments: 'الاستثمارات',
+          },
+          messages: {
+            nodesGroupLabel: 'عقد المخطط',
+            diagramLabel: ({nodeCount, flowCount}) => `مخطط التدفق: ${nodeCount} عقدة، ${flowCount} تدفق`,
+            edgeAriaLabel: ({source, target, value}) => `تدفق من ${source} إلى ${target}: ${value} وحدة`,
+          },
+        },
+        he: {
+          label: 'עברית',
+          dir: 'rtl',
+          titles: {
+            income: 'הכנסה',
+            housing: 'דיור',
+            food: 'מזון',
+            savings: 'חיסכון',
+            rent: 'שכר דירה',
+            groceries: 'מצרכים',
+            investments: 'השקעות',
+          },
+          messages: {
+            nodesGroupLabel: 'צמתים בתרשים',
+            diagramLabel: ({nodeCount, flowCount}) => `תרשים זרימה: ${nodeCount} צמתים, ${flowCount} זרימות`,
+            edgeAriaLabel: ({source, target, value}) => `זרימה מ-${source} ל-${target}: ${value} יחידות`,
+          },
+        },
+      };
+
+      const ORDER = ['en', 'fr', 'ar', 'he'];
+
+      function buildData(t) {
+        return {
+          nodes: [
+            {id: 'income', title: t.income, color: '#6366F1'},
+            {id: 'housing', title: t.housing, color: '#F43F5E'},
+            {id: 'food', title: t.food, color: '#F97316'},
+            {id: 'savings', title: t.savings, color: '#10B981'},
+            {id: 'rent', title: t.rent, color: '#FB7185'},
+            {id: 'groceries', title: t.groceries, color: '#FDBA74'},
+            {id: 'investments', title: t.investments, color: '#6EE7B7'},
+          ],
+          edges: [
+            {source: 'income', target: 'housing', value: 1800, type: 'flow'},
+            {source: 'income', target: 'food', value: 900, type: 'flow'},
+            {source: 'income', target: 'savings', value: 1200, type: 'flow'},
+            {source: 'housing', target: 'rent', value: 1500, type: 'flow'},
+            {source: 'food', target: 'groceries', value: 750, type: 'flow'},
+            {source: 'savings', target: 'investments', value: 1000, type: 'flow'},
+          ],
+        };
+      }
+
+      const host = document.getElementById('host');
+      const switcher = document.getElementById('switcher');
+
+      function mount(key) {
+        const cfg = LOCALES[key];
+
+        document.documentElement.setAttribute('lang', key);
+        document.documentElement.setAttribute('dir', cfg.dir);
+        [...switcher.children].forEach((b) => b.classList.toggle('active', b.dataset.key === key));
+
+        // Fresh mount node guarantees the previous SVG / listeners are gone.
+        host.innerHTML = '';
+        const el = document.createElement('div');
+        host.appendChild(el);
+
+        const s = new ApexSankey(el, {
+          nodeWidth: 18,
+          fontFamily: 'Segoe UI, Tahoma, sans-serif',
+          fontSize: '13px',
+          width: '100%',
+          height: 460,
+          canvasStyle: 'border: 1px solid #e2e8f0; border-radius: 8px; box-sizing: border-box;',
+          locale: {direction: cfg.dir, messages: cfg.messages},
+        });
+        s.render(buildData(cfg.titles));
+      }
+
+      ORDER.forEach((key) => {
+        const cfg = LOCALES[key];
+        const btn = document.createElement('button');
+        btn.className = 'lang-btn';
+        btn.dataset.key = key;
+        btn.innerHTML = `<span>${cfg.label}</span><span class="dir">${cfg.dir.toUpperCase()}</span>`;
+        btn.addEventListener('click', () => mount(key));
+        switcher.appendChild(btn);
+      });
+
+      mount('en');
+    </script>
+  </body>
+</html>
