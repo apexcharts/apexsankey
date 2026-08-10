@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Per-Node Colors - Olympic Medal Table</title>
+    <title>Draggable Nodes - Airline Passenger Transfers</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -22,13 +22,13 @@
         font-weight: 700;
         letter-spacing: 0.09em;
         text-transform: uppercase;
-        color: #ca8a04;
+        color: #2563eb;
         margin-bottom: 6px;
       }
       h2 {
         font-size: 24px;
         font-weight: 700;
-        color: #1a1a2e;
+        color: #0f1e3d;
         margin: 0 0 6px 0;
         line-height: 1.25;
       }
@@ -37,7 +37,7 @@
         line-height: 1.6;
         color: #64748b;
         margin: 0 0 16px 0;
-        max-width: 66ch;
+        max-width: 64ch;
       }
       code {
         background: #f1f5f9;
@@ -45,6 +45,14 @@
         border-radius: 4px;
         font-size: 12px;
         color: #0f172a;
+      }
+      .hint {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        font-size: 12.5px;
+        color: #6b7280;
+        margin: 0 0 14px 2px;
       }
       .legend {
         display: flex;
@@ -68,84 +76,65 @@
     </style>
   </head>
   <body>
-    <div class="kicker">Feature · Per-Node Colors</div>
-    <h2>Alternate Node Styling</h2>
+    <div class="kicker">Feature · Node Dragging</div>
+    <h2>Draggable Nodes</h2>
     <p class="subtitle">
-      Each node sets its own <code>color</code>, so three groups read at a glance: nations in flag-inspired hues,
-      disciplines in category colors, and the podium in gold, silver, and bronze. Follow any nation's ribbon to see
-      which sports carry it and how its haul splits across the medals.
+      Origin cities feed three connecting hubs before passengers scatter across the world. Grab any node (mouse, touch,
+      or pen) and reposition it: connected flows follow live, so you can untangle the hubs into the layout you want. Set
+      with <code>draggableNodes: true</code>. A tap still triggers click-to-focus; only a real drag moves a node.
     </p>
+    <p class="hint">✈️ Drag a hub (Dubai, Singapore, Frankfurt) up or down to rearrange the interchange.</p>
     <div id="svg-sankey"></div>
     <div class="legend">
-      <span><i style="background: #2563eb"></i> Nations</span>
-      <span><i style="background: #0ea5e9"></i> Disciplines</span>
-      <span><i style="background: #eab308"></i> Gold</span>
-      <span><i style="background: #9ca3af"></i> Silver</span>
-      <span><i style="background: #b45309"></i> Bronze</span>
+      <span><i style="background: #2563eb"></i> Origin cities</span>
+      <span><i style="background: #f59e0b"></i> Connecting hubs</span>
+      <span><i style="background: #16a34a"></i> Destination regions</span>
     </div>
     <script>
       const data = {
         nodes: [
-          // Nations
-          {id: 'USA', title: 'United States', color: '#2563eb'},
-          {id: 'CHN', title: 'China', color: '#dc2626'},
-          {id: 'GBR', title: 'Great Britain', color: '#4f46e5'},
-          {id: 'JPN', title: 'Japan', color: '#db2777'},
-          {id: 'AUS', title: 'Australia', color: '#16a34a'},
-          {id: 'GER', title: 'Germany', color: '#f59e0b'},
-          // Disciplines
-          {id: 'Swim', title: 'Swimming', color: '#0ea5e9'},
-          {id: 'Track', title: 'Athletics', color: '#f97316'},
-          {id: 'Gym', title: 'Gymnastics', color: '#a855f7'},
-          {id: 'Cycle', title: 'Cycling', color: '#14b8a6'},
-          // Podium
-          {id: 'Gold', title: 'Gold', color: '#eab308'},
-          {id: 'Silver', title: 'Silver', color: '#9ca3af'},
-          {id: 'Bronze', title: 'Bronze', color: '#b45309'},
+          // Origin cities
+          {id: 'NYC', title: 'New York', color: '#2563eb'},
+          {id: 'LAX', title: 'Los Angeles', color: '#0ea5e9'},
+          {id: 'LON', title: 'London', color: '#6366f1'},
+          {id: 'TYO', title: 'Tokyo', color: '#db2777'},
+          {id: 'SYD', title: 'Sydney', color: '#0891b2'},
+          // Connecting hubs
+          {id: 'DXB', title: 'Dubai (DXB)', color: '#f59e0b'},
+          {id: 'SIN', title: 'Singapore (SIN)', color: '#14b8a6'},
+          {id: 'FRA', title: 'Frankfurt (FRA)', color: '#ef4444'},
+          // Destination regions
+          {id: 'Africa', title: 'Africa', color: '#16a34a'},
+          {id: 'SouthAsia', title: 'South Asia', color: '#f97316'},
+          {id: 'SEAsia', title: 'Southeast Asia', color: '#10b981'},
+          {id: 'Europe', title: 'Europe', color: '#6366f1'},
+          {id: 'Oceania', title: 'Oceania', color: '#8b5cf6'},
         ],
         edges: [
-          // Nations -> disciplines
-          {source: 'USA', target: 'Swim', value: 40},
-          {source: 'USA', target: 'Track', value: 34},
-          {source: 'USA', target: 'Gym', value: 12},
-          {source: 'USA', target: 'Cycle', value: 8},
-          {source: 'CHN', target: 'Swim', value: 18},
-          {source: 'CHN', target: 'Gym', value: 22},
-          {source: 'CHN', target: 'Cycle', value: 14},
-          {source: 'CHN', target: 'Track', value: 10},
-          {source: 'GBR', target: 'Cycle', value: 26},
-          {source: 'GBR', target: 'Track', value: 16},
-          {source: 'GBR', target: 'Swim', value: 10},
-          {source: 'GBR', target: 'Gym', value: 6},
-          {source: 'JPN', target: 'Gym', value: 24},
-          {source: 'JPN', target: 'Swim', value: 14},
-          {source: 'JPN', target: 'Track', value: 8},
-          {source: 'JPN', target: 'Cycle', value: 6},
-          {source: 'AUS', target: 'Swim', value: 28},
-          {source: 'AUS', target: 'Cycle', value: 12},
-          {source: 'AUS', target: 'Track', value: 10},
-          {source: 'AUS', target: 'Gym', value: 4},
-          {source: 'GER', target: 'Cycle', value: 20},
-          {source: 'GER', target: 'Track', value: 14},
-          {source: 'GER', target: 'Gym', value: 10},
-          {source: 'GER', target: 'Swim', value: 8},
-          // Disciplines -> podium
-          {source: 'Swim', target: 'Gold', value: 42},
-          {source: 'Swim', target: 'Silver', value: 40},
-          {source: 'Swim', target: 'Bronze', value: 36},
-          {source: 'Track', target: 'Gold', value: 32},
-          {source: 'Track', target: 'Silver', value: 30},
-          {source: 'Track', target: 'Bronze', value: 30},
-          {source: 'Gym', target: 'Gold', value: 28},
-          {source: 'Gym', target: 'Silver', value: 26},
-          {source: 'Gym', target: 'Bronze', value: 24},
-          {source: 'Cycle', target: 'Gold', value: 30},
-          {source: 'Cycle', target: 'Silver', value: 28},
-          {source: 'Cycle', target: 'Bronze', value: 28},
+          // Origins -> hubs
+          {source: 'NYC', target: 'DXB', value: 210},
+          {source: 'NYC', target: 'FRA', value: 260},
+          {source: 'LAX', target: 'DXB', value: 150},
+          {source: 'LAX', target: 'SIN', value: 190},
+          {source: 'LON', target: 'DXB', value: 240},
+          {source: 'LON', target: 'FRA', value: 180},
+          {source: 'TYO', target: 'SIN', value: 200},
+          {source: 'TYO', target: 'DXB', value: 120},
+          {source: 'SYD', target: 'SIN', value: 230},
+          {source: 'SYD', target: 'DXB', value: 100},
+          // Hubs -> regions
+          {source: 'DXB', target: 'Africa', value: 260},
+          {source: 'DXB', target: 'SouthAsia', value: 320},
+          {source: 'DXB', target: 'Europe', value: 340},
+          {source: 'SIN', target: 'SEAsia', value: 380},
+          {source: 'SIN', target: 'SouthAsia', value: 140},
+          {source: 'SIN', target: 'Oceania', value: 300},
+          {source: 'FRA', target: 'Europe', value: 300},
+          {source: 'FRA', target: 'Africa', value: 140},
         ],
       };
 
-      const unit = 'medals';
+      const unit = 'k pax / mo';
       const fmt = (v) => v.toLocaleString('en-US');
 
       const tooltipTemplate = ({source, target, value}) => `
@@ -177,14 +166,15 @@
         fontSize: '12px',
         fontColor: '#334155',
         width: '100%',
-        height: 560,
-        spacing: 95,
+        height: 540,
+        spacing: 100,
         edgeGradientFill: true,
-        edgeOpacity: 0.32,
+        edgeOpacity: 0.34,
         enableToolbar: true,
+        draggableNodes: true,
         tooltipTemplate,
         nodeTooltipTemplate,
-        canvasStyle: 'border: 1px solid #e2e8f0; border-radius: 12px; background: #fafafa; box-sizing: border-box;',
+        canvasStyle: 'border: 1px solid #e2e8f0; border-radius: 12px; background: #fafbff; box-sizing: border-box;',
       };
 
       new ApexSankey(document.getElementById('svg-sankey'), options).render(data);

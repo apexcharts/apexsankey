@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Alluvial - Sankey</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+    <script src="../apexsankey.min.js"></script>
+    <style>
+      body {
+        max-width: 1000px;
+        margin: 0 auto;
+        font-family: 'Inter', sans-serif;
+        background: #fff;
+        padding: 20px 0;
+      }
+      h2 {
+        font-size: 22px;
+        font-weight: 700;
+        color: #1a1a2e;
+        margin: 0 0 4px 0;
+        line-height: 1.3;
+      }
+      .subtitle {
+        font-size: 13px;
+        color: #6e6e6e;
+        margin-bottom: 16px;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>Alluvial &mdash; Subscription Cohorts</h2>
+    <p class="subtitle">
+      The same engine as a Sankey, fed by <code>ApexSankey.buildAlluvialData</code> from categorical records across
+      dimensions. Each plan keeps its color across every year, so a cohort reads as one stream. Axis labels come from
+      <code>axisTitles</code>.
+    </p>
+    <div id="svg-sankey"></div>
+    <script>
+      // Each record is one cohort of subscribers and its plan in each year.
+      const input = {
+        dimensions: ['2019', '2022', '2025'],
+        records: [
+          {values: {2019: 'Free', 2022: 'Free', 2025: 'Free'}, value: 40},
+          {values: {2019: 'Free', 2022: 'Pro', 2025: 'Pro'}, value: 32},
+          {values: {2019: 'Free', 2022: 'Pro', 2025: 'Team'}, value: 14},
+          {values: {2019: 'Free', 2022: 'Free', 2025: 'Churned'}, value: 22},
+          {values: {2019: 'Pro', 2022: 'Pro', 2025: 'Team'}, value: 26},
+          {values: {2019: 'Pro', 2022: 'Team', 2025: 'Team'}, value: 18},
+          {values: {2019: 'Pro', 2022: 'Pro', 2025: 'Churned'}, value: 10},
+          {values: {2019: 'Team', 2022: 'Team', 2025: 'Team'}, value: 16},
+        ],
+      };
+
+      const s = new ApexSankey(document.getElementById('svg-sankey'), {
+        width: '100%',
+        height: 520,
+        spacing: 60,
+        fontFamily: 'Inter, sans-serif',
+        fontWeight: '500',
+        fontSize: '12px',
+        fontColor: '#334155',
+        axisTitles: input.dimensions,
+        canvasStyle: 'border: 1px solid #e2e8f0; border-radius: 8px; background: #fafafa; box-sizing: border-box;',
+      });
+      s.render({...ApexSankey.buildAlluvialData(input), options: s.options});
+    </script>
+  </body>
+</html>

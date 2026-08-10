@@ -3,11 +3,11 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Custom Fonts - Job Application Journey</title>
+    <title>Custom Fonts - Movie Production Pipeline</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Satisfy&family=Inter:wght@400;500;600&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600&display=swap"
       rel="stylesheet"
     />
     <script src="../apexsankey.min.js"></script>
@@ -16,89 +16,166 @@
         max-width: 1000px;
         margin: 0 auto;
         font-family: 'Inter', sans-serif;
-        background: #fff;
-        padding: 20px 0;
+        background: #14110f;
+        color: #efe7d6;
+        padding: 24px 0 40px;
+      }
+      .wrap {
+        padding: 0 20px;
+      }
+      .kicker {
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: #c6a15b;
+        margin-bottom: 8px;
       }
       h2 {
-        font-size: 22px;
+        font-family: 'Playfair Display', serif;
+        font-size: 30px;
         font-weight: 700;
-        color: #1a1a2e;
-        margin: 0 0 4px 0;
-        line-height: 1.3;
+        color: #f2e9d5;
+        margin: 0 0 8px 0;
+        line-height: 1.2;
       }
       .subtitle {
-        font-size: 13px;
-        color: #6e6e6e;
-        margin-bottom: 16px;
+        font-size: 13.5px;
+        line-height: 1.6;
+        color: #a79b83;
+        margin: 0 0 18px 0;
+        max-width: 64ch;
+      }
+      code {
+        background: #241f19;
+        padding: 1px 6px;
+        border-radius: 4px;
+        font-size: 12px;
+        color: #e2c98a;
+      }
+      .legend {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 14px 20px;
+        margin-top: 14px;
+        font-size: 12px;
+        color: #a79b83;
+      }
+      .legend span {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+      }
+      .legend i {
+        width: 11px;
+        height: 11px;
+        border-radius: 3px;
+        display: inline-block;
       }
     </style>
   </head>
   <body>
-    <h2>Job Application Journey</h2>
-    <p class="subtitle">
-      Custom Google Font with warm accent color (<code>fontFamily: 'Satisfy'</code>, <code>fontColor: '#B45309'</code>,
-      <code>fontSize: '18px'</code>) and column ordering via
-      <code>data.options.order</code>
-    </p>
-    <div id="svg-sankey"></div>
+    <div class="wrap">
+      <div class="kicker">Feature · Custom Fonts</div>
+      <h2>Custom Fonts</h2>
+      <p class="subtitle">
+        A display serif carries the labels for a cinematic feel: <code>fontFamily: 'Playfair Display'</code>,
+        <code>fontColor: '#e8d9b5'</code>, <code>fontSize: '17px'</code>. Explicit columns come from
+        <code>data.options.order</code>, so the pipeline reads as a clean funnel from pitch to box office.
+      </p>
+      <div id="svg-sankey"></div>
+      <div class="legend">
+        <span><i style="background: #e0a458"></i> Source material</span>
+        <span><i style="background: #6ba368"></i> Green-lit</span>
+        <span><i style="background: #6b7280"></i> Turnaround</span>
+        <span><i style="background: #e8b84b"></i> Box office</span>
+      </div>
+    </div>
     <script>
       const data = {
         nodes: [
-          {id: 'LinkedIn', title: 'LinkedIn', color: '#0A66C2'},
-          {id: 'Indeed', title: 'Indeed', color: '#2164F3'},
-          {id: 'Referral', title: 'Referral', color: '#7C3AED'},
-          {id: 'Company Site', title: 'Company Site', color: '#0891B2'},
-          {id: 'Recruiter', title: 'Recruiter', color: '#059669'},
-          {id: 'Applied', title: 'Applied', color: '#D97706'},
-          {id: 'No Response', title: 'No Response', color: '#D4D4D8'},
-          {id: 'Responded', title: 'Responded', color: '#F59E0B'},
-          {id: 'Rejected', title: 'Rejected', color: '#A3A3A3'},
-          {id: 'Interviewed', title: 'Interviewed', color: '#F97316'},
-          {id: 'No Offer', title: 'No Offer', color: '#CBD5E1'},
-          {id: 'Declined', title: 'Declined', color: '#94A3B8'},
-          {id: 'Accepted', title: 'Accepted!', color: '#16A34A'},
+          {id: 'OrigScript', title: 'Original Screenplay', color: '#e0a458'},
+          {id: 'BookAdapt', title: 'Book Adaptation', color: '#c4623d'},
+          {id: 'Franchise', title: 'Franchise Sequel', color: '#8c5e9e'},
+          {id: 'Remake', title: 'Remake', color: '#5b8a9e'},
+          {id: 'InDev', title: 'In Development', color: '#b08968'},
+          {id: 'GreenLit', title: 'Green-lit', color: '#6ba368'},
+          {id: 'Turnaround', title: 'Turnaround', color: '#6b7280'},
+          {id: 'Production', title: 'Production', color: '#c99846'},
+          {id: 'Hit', title: 'Box Office Hit', color: '#e8b84b'},
+          {id: 'Modest', title: 'Modest Earner', color: '#9ca777'},
+          {id: 'Flop', title: 'Flop', color: '#8a5a5a'},
+          {id: 'Cult', title: 'Cult Classic', color: '#a05cc0'},
         ],
         edges: [
-          {source: 'LinkedIn', target: 'Applied', value: 85},
-          {source: 'Indeed', target: 'Applied', value: 62},
-          {source: 'Referral', target: 'Applied', value: 28},
-          {source: 'Company Site', target: 'Applied', value: 40},
-          {source: 'Recruiter', target: 'Applied', value: 23},
-          {source: 'Applied', target: 'No Response', value: 168},
-          {source: 'Applied', target: 'Responded', value: 70},
-          {source: 'Responded', target: 'Rejected', value: 48},
-          {source: 'Responded', target: 'Interviewed', value: 22},
-          {source: 'Interviewed', target: 'No Offer', value: 14},
-          {source: 'Interviewed', target: 'Declined', value: 4},
-          {source: 'Interviewed', target: 'Accepted', value: 4},
+          {source: 'OrigScript', target: 'InDev', value: 30},
+          {source: 'BookAdapt', target: 'InDev', value: 24},
+          {source: 'Franchise', target: 'InDev', value: 20},
+          {source: 'Remake', target: 'InDev', value: 14},
+          {source: 'InDev', target: 'GreenLit', value: 60},
+          {source: 'InDev', target: 'Turnaround', value: 28},
+          {source: 'GreenLit', target: 'Production', value: 60},
+          {source: 'Production', target: 'Hit', value: 16},
+          {source: 'Production', target: 'Modest', value: 22},
+          {source: 'Production', target: 'Flop', value: 14},
+          {source: 'Production', target: 'Cult', value: 8},
         ],
         options: {
           order: [
-            [['LinkedIn', 'Indeed', 'Referral', 'Company Site', 'Recruiter']],
-            [['Applied']],
-            [['Responded'], ['No Response']],
-            [['Interviewed'], ['Rejected']],
-            [['Accepted', 'Declined', 'No Offer']],
+            [['OrigScript', 'BookAdapt', 'Franchise', 'Remake']],
+            [['InDev']],
+            [['GreenLit'], ['Turnaround']],
+            [['Production']],
+            [['Hit', 'Modest', 'Flop', 'Cult']],
           ],
         },
       };
 
+      const unit = 'films';
+      const fmt = (v) => v.toLocaleString('en-US');
+
+      const tooltipTemplate = ({source, target, value}) => `
+        <div style="font-family:Inter,sans-serif;background:#fff;border:1px solid #e2e8f0;border-radius:8px;box-shadow:0 6px 18px rgba(15,23,42,0.14);padding:9px 11px;min-width:170px">
+          <div style="display:flex;align-items:center;gap:7px;font-size:12px;font-weight:600;color:#f2e9d5">
+            <span style="width:9px;height:9px;border-radius:2px;background:${source.color}"></span>${source.title}
+            <span style="color:#6b6152">→</span>
+            <span style="width:9px;height:9px;border-radius:2px;background:${target.color}"></span>${target.title}
+          </div>
+          <div style="margin-top:6px;font-size:18px;font-weight:700;color:#f2e9d5">${fmt(value)}
+            <span style="font-size:11px;font-weight:500;color:#a79b83;margin-left:3px">${unit}</span>
+          </div>
+        </div>`;
+
+      const nodeTooltipTemplate = ({node, value}) => `
+        <div style="font-family:Inter,sans-serif;background:#fff;border:1px solid #e2e8f0;border-radius:8px;box-shadow:0 6px 18px rgba(15,23,42,0.14);padding:9px 11px;min-width:140px">
+          <div style="display:flex;align-items:center;gap:7px;font-size:12px;font-weight:600;color:#f2e9d5">
+            <span style="width:9px;height:9px;border-radius:2px;background:${node.color}"></span>${node.title}
+          </div>
+          <div style="margin-top:6px;font-size:18px;font-weight:700;color:#f2e9d5">${fmt(value)}
+            <span style="font-size:11px;font-weight:500;color:#a79b83;margin-left:3px">${unit}</span>
+          </div>
+        </div>`;
+
       const options = {
-        nodeWidth: 12,
-        fontSize: '18px',
-        fontFamily: 'Satisfy, cursive',
-        fontWeight: '400',
-        fontColor: '#B45309',
+        nodeWidth: 14,
+        fontSize: '17px',
+        fontFamily: 'Playfair Display, serif',
+        fontWeight: '600',
+        fontColor: '#e8d9b5',
         width: '100%',
         height: 600,
         edgeGradientFill: true,
-        edgeOpacity: 0.3,
+        edgeOpacity: 0.34,
         enableToolbar: false,
-        canvasStyle: 'border: 1px solid #e7e5e4; border-radius: 8px; background: #fffbf5; box-sizing: border-box;',
+        tooltipTheme: 'dark',
+        tooltipBGColor: '#1b1712',
+        tooltipBorderColor: '#33291d',
+        tooltipTemplate,
+        nodeTooltipTemplate,
+        canvasStyle: 'border: 1px solid #2a2118; border-radius: 12px; background: #1a1611; box-sizing: border-box;',
       };
 
-      const s = new ApexSankey(document.getElementById('svg-sankey'), options);
-      s.render(data);
+      new ApexSankey(document.getElementById('svg-sankey'), options).render(data);
     </script>
   </body>
 </html>

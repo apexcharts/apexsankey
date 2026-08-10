@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Themes - Sankey</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+    <script src="../apexsankey.min.js"></script>
+    <style>
+      body {
+        max-width: 1000px;
+        margin: 0 auto;
+        font-family: 'Inter', sans-serif;
+        background: #fff;
+        padding: 20px 0;
+      }
+      h2 {
+        font-size: 22px;
+        font-weight: 700;
+        color: #1a1a2e;
+        margin: 0 0 4px 0;
+        line-height: 1.3;
+      }
+      .subtitle {
+        font-size: 13px;
+        color: #6e6e6e;
+        margin-bottom: 16px;
+      }
+      .themes {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-bottom: 16px;
+      }
+      .themes button {
+        font: inherit;
+        font-size: 13px;
+        font-weight: 500;
+        padding: 6px 14px;
+        border-radius: 999px;
+        border: 1px solid #d7dde3;
+        background: #fff;
+        color: #334155;
+        cursor: pointer;
+      }
+      .themes button[aria-pressed='true'] {
+        background: #0f172a;
+        border-color: #0f172a;
+        color: #fff;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>Themes</h2>
+    <p class="subtitle">
+      One <code>theme</code> option seeds a coordinated palette, label color, edge opacity, and background. Pick one:
+    </p>
+    <div class="themes" id="themes"></div>
+    <div id="svg-sankey"></div>
+    <script>
+      const data = {
+        nodes: [
+          {id: 'Coal', title: 'Coal'},
+          {id: 'Gas', title: 'Gas'},
+          {id: 'Solar', title: 'Solar'},
+          {id: 'Wind', title: 'Wind'},
+          {id: 'Grid', title: 'Grid'},
+          {id: 'Homes', title: 'Homes'},
+          {id: 'Industry', title: 'Industry'},
+          {id: 'Losses', title: 'Losses'},
+        ],
+        edges: [
+          {source: 'Coal', target: 'Grid', value: 320},
+          {source: 'Gas', target: 'Grid', value: 280},
+          {source: 'Solar', target: 'Grid', value: 160},
+          {source: 'Wind', target: 'Grid', value: 240},
+          {source: 'Grid', target: 'Homes', value: 400},
+          {source: 'Grid', target: 'Industry', value: 480},
+          {source: 'Grid', target: 'Losses', value: 120},
+        ],
+      };
+
+      const THEMES = ['light', 'dark', 'midnight', 'mint', 'sunset'];
+      let current = 'dark';
+
+      const bar = document.getElementById('themes');
+      THEMES.forEach((name) => {
+        const b = document.createElement('button');
+        b.textContent = name;
+        b.setAttribute('aria-pressed', String(name === current));
+        b.addEventListener('click', () => {
+          current = name;
+          for (const btn of bar.children) btn.setAttribute('aria-pressed', String(btn.textContent === name));
+          draw();
+        });
+        bar.appendChild(b);
+      });
+
+      function draw() {
+        const s = new ApexSankey(document.getElementById('svg-sankey'), {
+          theme: current,
+          width: '100%',
+          height: 520,
+          fontFamily: 'Inter, sans-serif',
+          fontWeight: '500',
+          fontSize: '12px',
+        });
+        s.render(data);
+      }
+
+      draw();
+    </script>
+  </body>
+</html>

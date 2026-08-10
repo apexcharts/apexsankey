@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Animated Data Morph - Add / Remove Flows</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <script src="../apexsankey.min.js"></script>
+    <style>
+      body {
+        max-width: 1000px;
+        margin: 0 auto;
+        font-family: 'Inter', sans-serif;
+        background: #fff;
+        padding: 20px 0;
+      }
+      h2 {
+        font-size: 22px;
+        font-weight: 700;
+        color: #1a1a2e;
+        margin: 0 0 4px 0;
+      }
+      .subtitle {
+        font-size: 13px;
+        color: #6e6e6e;
+        margin-bottom: 16px;
+      }
+      .controls {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 14px;
+      }
+      button {
+        font:
+          600 13px 'Inter',
+          sans-serif;
+        padding: 8px 16px;
+        border-radius: 8px;
+        border: 1px solid #d7dbe0;
+        background: #fff;
+        color: #334155;
+        cursor: pointer;
+      }
+      button[aria-pressed='true'] {
+        background: #0d8f84;
+        border-color: #0d8f84;
+        color: #fff;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>Grid Energy Mix: Add / Remove a Flow</h2>
+    <p class="subtitle">
+      Adding or removing a node changes the topology, so <code>sankey.update(data)</code> morphs through it: the new
+      Storage branch grows out of its source nodes while the survivors slide to their new places, and it retracts and
+      dissolves when removed.
+    </p>
+    <div class="controls">
+      <button id="btn-remove" aria-pressed="true">Without storage</button>
+      <button id="btn-add" aria-pressed="false">With storage</button>
+    </div>
+    <div id="svg-sankey"></div>
+    <script>
+      const baseNodes = [
+        {id: 'Coal', title: 'Coal', color: '#64748B'},
+        {id: 'Gas', title: 'Natural Gas', color: '#F59E0B'},
+        {id: 'Wind', title: 'Wind', color: '#0EA5E9'},
+        {id: 'Solar', title: 'Solar', color: '#FBBF24'},
+        {id: 'Grid', title: 'Grid', color: '#0D8F84'},
+        {id: 'Homes', title: 'Homes', color: '#10B981'},
+        {id: 'Industry', title: 'Industry', color: '#F43F5E'},
+      ];
+      const baseEdges = [
+        {source: 'Coal', target: 'Grid', value: 180},
+        {source: 'Gas', target: 'Grid', value: 220},
+        {source: 'Wind', target: 'Grid', value: 320},
+        {source: 'Solar', target: 'Grid', value: 280},
+        {source: 'Grid', target: 'Homes', value: 480},
+        {source: 'Grid', target: 'Industry', value: 520},
+      ];
+
+      // "With storage" adds a node and two flows -> a topology change (cross-fade).
+      const withStorage = {
+        nodes: [...baseNodes, {id: 'Storage', title: 'Storage', color: '#8B5CF6'}],
+        edges: [
+          ...baseEdges,
+          {source: 'Grid', target: 'Storage', value: 140},
+          {source: 'Solar', target: 'Storage', value: 60},
+        ],
+      };
+      const withoutStorage = {nodes: baseNodes, edges: baseEdges};
+
+      const options = {
+        nodeWidth: 18,
+        fontFamily: 'Inter, sans-serif',
+        fontWeight: '600',
+        fontSize: '12px',
+        fontColor: '#334155',
+        width: '100%',
+        height: 520,
+        edgeGradientFill: true,
+        edgeOpacity: 0.4,
+        enableToolbar: true,
+        canvasStyle: 'border: 1px solid #e2e8f0; border-radius: 8px; background: #fafafa; box-sizing: border-box;',
+      };
+
+      const sankey = new ApexSankey(document.getElementById('svg-sankey'), options);
+      sankey.render(withoutStorage);
+
+      const btnRemove = document.getElementById('btn-remove');
+      const btnAdd = document.getElementById('btn-add');
+
+      function show(hasStorage) {
+        sankey.update(hasStorage ? withStorage : withoutStorage);
+        btnAdd.setAttribute('aria-pressed', String(hasStorage));
+        btnRemove.setAttribute('aria-pressed', String(!hasStorage));
+      }
+
+      btnAdd.addEventListener('click', () => show(true));
+      btnRemove.addEventListener('click', () => show(false));
+    </script>
+  </body>
+</html>

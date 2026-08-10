@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Time Playback - Sankey</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+    <script src="../apexsankey.min.js"></script>
+    <style>
+      body {
+        max-width: 1000px;
+        margin: 0 auto;
+        font-family: 'Inter', sans-serif;
+        background: #fff;
+        padding: 20px 0;
+      }
+      h2 {
+        font-size: 22px;
+        font-weight: 700;
+        color: #1a1a2e;
+        margin: 0 0 4px 0;
+        line-height: 1.3;
+      }
+      .subtitle {
+        font-size: 13px;
+        color: #6e6e6e;
+        margin-bottom: 16px;
+      }
+      #chart-wrap {
+        display: flex;
+        flex-direction: column;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>Time Playback: Energy Mix Over Time</h2>
+    <p class="subtitle">
+      Press play: ten years of data (2016 to 2025), one frame per year, each springing into the next via
+      <code>update()</code>. A plugin (<code>use(ApexSankey.plugins.timePlayback())</code>) provides the scrubber and
+      play/pause, mounted above the chart.
+    </p>
+    <div id="chart-wrap">
+      <div id="playback-controls"></div>
+      <div id="svg-sankey"></div>
+    </div>
+    <script>
+      const nodes = [
+        {id: 'Coal', title: 'Coal', color: '#78716c'},
+        {id: 'Gas', title: 'Gas', color: '#f59e0b'},
+        {id: 'Solar', title: 'Solar', color: '#eab308'},
+        {id: 'Wind', title: 'Wind', color: '#38bdf8'},
+        {id: 'Grid', title: 'Grid', color: '#6366f1'},
+        {id: 'Homes', title: 'Homes', color: '#10b981'},
+        {id: 'Industry', title: 'Industry', color: '#ec4899'},
+      ];
+      const frame = (label, coal, gas, solar, wind) => ({
+        label,
+        nodes,
+        edges: [
+          {source: 'Coal', target: 'Grid', value: coal},
+          {source: 'Gas', target: 'Grid', value: gas},
+          {source: 'Solar', target: 'Grid', value: solar},
+          {source: 'Wind', target: 'Grid', value: wind},
+          {source: 'Grid', target: 'Homes', value: Math.round((coal + gas + solar + wind) * 0.45)},
+          {source: 'Grid', target: 'Industry', value: Math.round((coal + gas + solar + wind) * 0.55)},
+        ],
+      });
+
+      // Renewables rise, coal falls, across ten years (same topology, so each
+      // year springs smoothly into the next). One frame per year, 2016 to 2025.
+      const YEARS = 10;
+      const lerp = (a, b, t) => Math.round(a + (b - a) * t);
+      const frames = Array.from({length: YEARS}, (_, i) => {
+        const t = i / (YEARS - 1);
+        return frame(String(2016 + i), lerp(320, 150, t), lerp(240, 205, t), lerp(40, 240, t), lerp(60, 285, t));
+      });
+
+      const s = new ApexSankey(document.getElementById('svg-sankey'), {
+        width: '100%',
+        height: 480,
+        fontFamily: 'Inter, sans-serif',
+        fontWeight: '500',
+        fontSize: '12px',
+        fontColor: '#334155',
+        canvasStyle: 'border: 1px solid #e2e8f0; border-radius: 8px; background: #fafafa; box-sizing: border-box;',
+      });
+      s.render({...frames[0], options: s.options});
+      s.use(
+        ApexSankey.plugins.timePlayback({
+          frames,
+          interval: 1200,
+          loop: true,
+          mount: document.getElementById('playback-controls'),
+        })
+      );
+    </script>
+  </body>
+</html>

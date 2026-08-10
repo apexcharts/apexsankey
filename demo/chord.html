@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chord - Sankey</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+    <script src="../apexsankey.min.js"></script>
+    <style>
+      body {
+        max-width: 1000px;
+        margin: 0 auto;
+        font-family: 'Inter', sans-serif;
+        background: #fff;
+        padding: 20px 0;
+      }
+      h2 {
+        font-size: 22px;
+        font-weight: 700;
+        color: #1a1a2e;
+        margin: 0 0 4px 0;
+        line-height: 1.3;
+      }
+      .subtitle {
+        font-size: 13px;
+        color: #6e6e6e;
+        margin-bottom: 16px;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>Chord &mdash; Migration Between Regions</h2>
+    <p class="subtitle">
+      The radial projection of the same <code>{ nodes, edges }</code> model (<code>type: 'chord'</code>). Nodes are arcs
+      on the ring; each flow is a ribbon across the interior. Hover an arc or ribbon to focus its connections.
+    </p>
+    <div id="svg-sankey"></div>
+    <script>
+      const data = {
+        nodes: [
+          {id: 'North', title: 'North', color: '#6366F1'},
+          {id: 'South', title: 'South', color: '#F43F5E'},
+          {id: 'East', title: 'East', color: '#F97316'},
+          {id: 'West', title: 'West', color: '#10B981'},
+          {id: 'Central', title: 'Central', color: '#0EA5E9'},
+        ],
+        edges: [
+          {source: 'North', target: 'South', value: 24, type: 'm'},
+          {source: 'North', target: 'East', value: 18, type: 'm'},
+          {source: 'North', target: 'Central', value: 30, type: 'm'},
+          {source: 'South', target: 'West', value: 22, type: 'm'},
+          {source: 'South', target: 'Central', value: 16, type: 'm'},
+          {source: 'East', target: 'West', value: 14, type: 'm'},
+          {source: 'East', target: 'Central', value: 20, type: 'm'},
+          {source: 'West', target: 'Central', value: 26, type: 'm'},
+          {source: 'West', target: 'North', value: 12, type: 'm'},
+          {source: 'Central', target: 'North', value: 10, type: 'm'},
+        ],
+      };
+
+      const s = new ApexSankey(document.getElementById('svg-sankey'), {
+        type: 'chord',
+        width: '100%',
+        height: 560,
+        fontFamily: 'Inter, sans-serif',
+        fontWeight: '500',
+        fontSize: '13px',
+        fontColor: '#334155',
+        edgeOpacity: 0.55,
+        canvasStyle: 'border: 1px solid #e2e8f0; border-radius: 8px; background: #fafafa; box-sizing: border-box;',
+      });
+      s.render(data);
+    </script>
+  </body>
+</html>

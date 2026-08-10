@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vertical Sankey - Top to Bottom Flow</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <script src="../apexsankey.min.js"></script>
+    <style>
+      body {
+        max-width: 760px;
+        margin: 0 auto;
+        font-family: 'Inter', sans-serif;
+        background: #fff;
+        padding: 20px 0;
+      }
+      h2 {
+        font-size: 22px;
+        font-weight: 700;
+        color: #1a1a2e;
+        margin: 0 0 4px 0;
+      }
+      .subtitle {
+        font-size: 13px;
+        color: #6e6e6e;
+        margin-bottom: 16px;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>Website Traffic &mdash; Vertical Flow</h2>
+    <p class="subtitle">
+      A top-to-bottom Sankey (<code>orientation: 'vertical'</code>): ranks are laid out in rows and flows read downward.
+    </p>
+    <div id="svg-sankey"></div>
+    <script>
+      const data = {
+        nodes: [
+          {id: 'Search', title: 'Search', color: '#6366F1'},
+          {id: 'Social', title: 'Social', color: '#8B5CF6'},
+          {id: 'Direct', title: 'Direct', color: '#0EA5E9'},
+          {id: 'Landing', title: 'Landing Page', color: '#0D8F84'},
+          {id: 'Product', title: 'Product', color: '#10B981'},
+          {id: 'Signup', title: 'Sign Up', color: '#F59E0B'},
+          {id: 'Purchase', title: 'Purchase', color: '#F43F5E'},
+          {id: 'Bounce', title: 'Bounce', color: '#94A3B8'},
+        ],
+        edges: [
+          {source: 'Search', target: 'Landing', value: 500},
+          {source: 'Social', target: 'Landing', value: 300},
+          {source: 'Direct', target: 'Landing', value: 200},
+          {source: 'Landing', target: 'Product', value: 620},
+          {source: 'Landing', target: 'Bounce', value: 380},
+          {source: 'Product', target: 'Signup', value: 400},
+          {source: 'Product', target: 'Bounce', value: 220},
+          {source: 'Signup', target: 'Purchase', value: 260},
+          {source: 'Signup', target: 'Bounce', value: 140},
+        ],
+      };
+
+      const options = {
+        orientation: 'vertical',
+        nodeWidth: 18,
+        fontFamily: 'Inter, sans-serif',
+        fontWeight: '600',
+        fontSize: '12px',
+        fontColor: '#334155',
+        width: 720,
+        height: 620,
+        viewPortWidth: 720,
+        viewPortHeight: 620,
+        edgeGradientFill: true,
+        edgeOpacity: 0.4,
+        enableToolbar: true,
+        canvasStyle: 'border: 1px solid #e2e8f0; border-radius: 8px; background: #fafafa; box-sizing: border-box;',
+      };
+
+      const sankey = new ApexSankey(document.getElementById('svg-sankey'), options);
+      sankey.render(data);
+    </script>
+  </body>
+</html>

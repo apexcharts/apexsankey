@@ -3,102 +3,162 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Sankey - Connected Path Highlight on Hover</title>
-    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&display=swap" rel="stylesheet" />
+    <title>Path Highlight & Tracing - Food Supply Chain</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
     <script src="../apexsankey.min.js"></script>
     <style>
       body {
-        font-family: 'Quicksand', sans-serif;
-        margin: 0 auto;
-        padding: 24px;
-        background: #f5f6fa;
-        color: #212121;
         max-width: 1000px;
+        margin: 0 auto;
+        font-family: 'Inter', sans-serif;
+        background: #fff;
+        color: #1a1a2e;
+        padding: 24px 0 40px;
       }
-
-      h1 {
-        font-size: 1.4rem;
-        font-weight: 600;
-        margin: 0 0 4px;
+      .kicker {
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.09em;
+        text-transform: uppercase;
+        color: #16a34a;
+        margin-bottom: 6px;
       }
-
-      p.subtitle {
-        margin: 0 0 20px;
-        font-size: 0.9rem;
-        color: #555;
+      h2 {
+        font-size: 24px;
+        font-weight: 700;
+        color: #14210f;
+        margin: 0 0 6px 0;
+        line-height: 1.25;
       }
-
+      .subtitle {
+        font-size: 13.5px;
+        line-height: 1.6;
+        color: #64748b;
+        margin: 0 0 18px 0;
+        max-width: 64ch;
+      }
+      code {
+        background: #f1f5f9;
+        padding: 1px 6px;
+        border-radius: 4px;
+        font-size: 12px;
+        color: #0f172a;
+      }
       .controls {
         display: flex;
         flex-wrap: wrap;
-        gap: 24px;
+        gap: 22px;
         align-items: center;
-        background: #fff;
-        border: 1px solid #dde1e7;
-        border-radius: 8px;
-        padding: 16px 20px;
-        margin-bottom: 20px;
+        background: #f8faf7;
+        border: 1px solid #e4ece0;
+        border-radius: 10px;
+        padding: 14px 18px;
+        margin-bottom: 14px;
       }
-
       .control-group {
         display: flex;
         align-items: center;
         gap: 10px;
       }
-
       .control-group label {
         font-weight: 600;
-        font-size: 0.875rem;
+        font-size: 12px;
+        color: #475569;
         white-space: nowrap;
       }
-
       .toggle-btn {
         cursor: pointer;
-        padding: 6px 16px;
-        border-radius: 6px;
-        border: 2px solid #008ffb;
-        background: #008ffb;
+        padding: 6px 15px;
+        border-radius: 7px;
+        border: 1.5px solid #16a34a;
+        background: #16a34a;
         color: #fff;
-        font-family: 'Quicksand', sans-serif;
+        font-family: 'Inter', sans-serif;
         font-weight: 600;
-        font-size: 0.875rem;
+        font-size: 12px;
         transition:
           background 0.15s,
           color 0.15s;
       }
-
       .toggle-btn.off {
         background: #fff;
-        color: #008ffb;
+        color: #16a34a;
       }
-
       input[type='range'] {
-        width: 140px;
-        accent-color: #008ffb;
+        width: 130px;
+        accent-color: #16a34a;
       }
-
-      #opacity-value {
+      .value-label {
         font-weight: 600;
-        min-width: 36px;
+        font-size: 12px;
+        color: #334155;
+        min-width: 34px;
         text-align: right;
       }
-
-      .hint {
-        font-size: 0.8rem;
-        color: #777;
-        margin-bottom: 12px;
+      .seg {
+        display: inline-flex;
+        border: 1.5px solid #d7e2d0;
+        border-radius: 7px;
+        overflow: hidden;
       }
-
-      #svg-sankey {
-        margin: 0 auto;
+      .seg button {
+        cursor: pointer;
+        border: none;
+        background: #fff;
+        color: #475569;
+        font-family: 'Inter', sans-serif;
+        font-weight: 600;
+        font-size: 12px;
+        padding: 6px 12px;
+        border-right: 1px solid #e4ece0;
+      }
+      .seg button:last-child {
+        border-right: none;
+      }
+      .seg button[aria-pressed='true'] {
+        background: #e11d48;
+        color: #fff;
+      }
+      .hint {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        font-size: 12.5px;
+        color: #6b7280;
+        margin: 0 0 14px 2px;
+      }
+      .legend {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 14px 20px;
+        margin-top: 14px;
+        font-size: 12px;
+        color: #475569;
+      }
+      .legend span {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+      }
+      .legend i {
+        width: 11px;
+        height: 11px;
+        border-radius: 3px;
+        display: inline-block;
       }
     </style>
   </head>
   <body>
-    <h1>Connected Path Highlight on Hover</h1>
+    <div class="kicker">Feature · Path Highlight &amp; Tracing</div>
+    <h2>Farm to Plate &mdash; Highlight and Trace the Food Supply Chain</h2>
     <p class="subtitle">
-      Hover over any <strong>node</strong> or <strong>edge</strong> to highlight its connected flow path and dim
-      unrelated elements. Use the controls below to explore the options.
+      Two gestures for the same question &mdash; where does this flow go? <strong>Hover</strong> any node or ribbon to
+      highlight its connected path and dim the rest (built-in <code>highlightConnectedPath</code> +
+      <code>dimOpacity</code>). <strong>Click</strong> a node to pin that path and send a pulse cascading along it
+      &mdash; the <code>pathTrace</code> plugin (<code>use(ApexSankey.plugins.pathTrace())</code>) layered on top. Both
+      skip under <code>prefers-reduced-motion</code>.
     </p>
 
     <div class="controls">
@@ -108,75 +168,144 @@
       </div>
       <div class="control-group">
         <label for="dim-opacity">dimOpacity</label>
-        <input type="range" id="dim-opacity" min="0" max="0.5" step="0.05" value="0.15" />
-        <span id="opacity-value">0.15</span>
+        <input type="range" id="dim-opacity" min="0" max="0.5" step="0.05" value="0.1" />
+        <span id="opacity-value" class="value-label">0.10</span>
+      </div>
+      <div class="control-group">
+        <label>pathTrace direction</label>
+        <div class="seg" id="dir-seg">
+          <button data-dir="downstream" aria-pressed="true">Downstream</button>
+          <button data-dir="upstream" aria-pressed="false">Upstream</button>
+          <button data-dir="both" aria-pressed="false">Both</button>
+        </div>
       </div>
     </div>
 
-    <p class="hint">💡 Hover a node or an edge in the diagram to see the effect.</p>
+    <p class="hint">🍽️ Hover to highlight a stream &middot; click a farm, processor, or channel to trace the pulse.</p>
 
     <div id="svg-sankey"></div>
+
+    <div class="legend">
+      <span><i style="background: #d9a441"></i> Producers</span>
+      <span><i style="background: #caa15a"></i> Processing</span>
+      <span><i style="background: #4a86c5"></i> Channels</span>
+      <span><i style="background: #3f7cac"></i> Consumption</span>
+      <span><i style="background: #94a3b8"></i> Loss / waste</span>
+    </div>
 
     <script>
       const data = {
         nodes: [
-          {id: 'Solar', title: 'Solar'},
-          {id: 'Wind', title: 'Wind'},
-          {id: 'Hydro', title: 'Hydro'},
-          {id: 'Gas', title: 'Gas'},
-          {id: 'Coal', title: 'Coal'},
-          {id: 'Electricity', title: 'Electricity'},
-          {id: 'Heat', title: 'Heat'},
-          {id: 'Transport', title: 'Transport'},
-          {id: 'Industry', title: 'Industry'},
-          {id: 'Homes', title: 'Homes'},
-          {id: 'Losses', title: 'Losses'},
+          // Producers
+          {id: 'Grain', title: 'Grain Farms', color: '#d9a441'},
+          {id: 'Veg', title: 'Vegetable Farms', color: '#6aa84f'},
+          {id: 'Dairy', title: 'Dairy Farms', color: '#7fb2e5'},
+          {id: 'Livestock', title: 'Livestock', color: '#c0603f'},
+          {id: 'Orchards', title: 'Orchards', color: '#e06c9f'},
+          // Processing
+          {id: 'Milling', title: 'Milling & Bakery', color: '#caa15a'},
+          {id: 'Packing', title: 'Fresh Packing', color: '#82b366'},
+          {id: 'MeatDairy', title: 'Dairy & Meat', color: '#cf7a52'},
+          // Channels
+          {id: 'Supermarkets', title: 'Supermarkets', color: '#4a86c5'},
+          {id: 'Restaurants', title: 'Restaurants', color: '#b5844a'},
+          {id: 'Exports', title: 'Exports', color: '#7a9e5a'},
+          // Consumption
+          {id: 'Households', title: 'Households', color: '#3f7cac'},
+          {id: 'FoodService', title: 'Food Service', color: '#b07d3a'},
+          {id: 'Overseas', title: 'Overseas', color: '#6b8f3d'},
+          {id: 'Waste', title: 'Food Waste', color: '#94a3b8'},
         ],
         edges: [
-          {source: 'Solar', target: 'Electricity', value: 30},
-          {source: 'Wind', target: 'Electricity', value: 25},
-          {source: 'Hydro', target: 'Electricity', value: 20},
-          {source: 'Gas', target: 'Electricity', value: 15},
-          {source: 'Gas', target: 'Heat', value: 20},
-          {source: 'Coal', target: 'Electricity', value: 10},
-          {source: 'Coal', target: 'Heat', value: 10},
-          {source: 'Electricity', target: 'Transport', value: 25},
-          {source: 'Electricity', target: 'Industry', value: 35},
-          {source: 'Electricity', target: 'Homes', value: 25},
-          {source: 'Electricity', target: 'Losses', value: 15},
-          {source: 'Heat', target: 'Industry', value: 18},
-          {source: 'Heat', target: 'Homes', value: 12},
+          // Producers -> Processing
+          {source: 'Grain', target: 'Milling', value: 320},
+          {source: 'Orchards', target: 'Packing', value: 150},
+          {source: 'Veg', target: 'Packing', value: 260},
+          {source: 'Dairy', target: 'MeatDairy', value: 210},
+          {source: 'Livestock', target: 'MeatDairy', value: 240},
+          // Processing -> Channels
+          {source: 'Milling', target: 'Supermarkets', value: 170},
+          {source: 'Milling', target: 'Restaurants', value: 90},
+          {source: 'Milling', target: 'Exports', value: 60},
+          {source: 'Packing', target: 'Supermarkets', value: 210},
+          {source: 'Packing', target: 'Restaurants', value: 120},
+          {source: 'Packing', target: 'Exports', value: 80},
+          {source: 'MeatDairy', target: 'Supermarkets', value: 220},
+          {source: 'MeatDairy', target: 'Restaurants', value: 150},
+          {source: 'MeatDairy', target: 'Exports', value: 80},
+          // Channels -> Consumption
+          {source: 'Supermarkets', target: 'Households', value: 470},
+          {source: 'Supermarkets', target: 'Waste', value: 130},
+          {source: 'Restaurants', target: 'FoodService', value: 300},
+          {source: 'Restaurants', target: 'Waste', value: 60},
+          {source: 'Exports', target: 'Overseas', value: 220},
         ],
       };
 
+      const unit = 'kt / yr';
+      const fmt = (v) => v.toLocaleString('en-US');
+      const card =
+        'font-family:Inter,sans-serif;background:#fff;border:1px solid #e2e8f0;border-radius:8px;box-shadow:0 6px 18px rgba(15,23,42,0.14);padding:9px 11px;';
+
+      const tooltipTemplate = ({source, target, value}) => `
+        <div style="${card}min-width:160px">
+          <div style="display:flex;align-items:center;gap:7px;font-size:12px;font-weight:600;color:#0f172a">
+            <span style="width:9px;height:9px;border-radius:2px;background:${source.color}"></span>${source.title}
+            <span style="color:#cbd5e1">→</span>
+            <span style="width:9px;height:9px;border-radius:2px;background:${target.color}"></span>${target.title}
+          </div>
+          <div style="margin-top:6px;font-size:18px;font-weight:700;color:#0f172a">${fmt(value)}
+            <span style="font-size:11px;font-weight:500;color:#64748b;margin-left:3px">${unit}</span>
+          </div>
+        </div>`;
+
+      const nodeTooltipTemplate = ({node, value}) => `
+        <div style="${card}min-width:130px">
+          <div style="display:flex;align-items:center;gap:7px;font-size:12px;font-weight:600;color:#0f172a">
+            <span style="width:9px;height:9px;border-radius:2px;background:${node.color}"></span>${node.title}
+          </div>
+          <div style="margin-top:6px;font-size:18px;font-weight:700;color:#0f172a">${fmt(value)}
+            <span style="font-size:11px;font-weight:500;color:#64748b;margin-left:3px">${unit}</span>
+          </div>
+        </div>`;
+
       let highlightEnabled = true;
-      let dimOpacity = 0.2;
-      let sankeyInstance = null;
+      let dimOpacity = 0.1;
+      let traceDirection = 'downstream';
 
       function buildOptions() {
         return {
-          nodeWidth: 20,
-          fontFamily: 'Quicksand, sans-serif',
+          nodeWidth: 18,
+          fontFamily: 'Inter, sans-serif',
           fontWeight: '600',
-          height: 520,
+          fontSize: '12px',
+          fontColor: '#334155',
+          height: 540,
           width: '100%',
-          edgeOpacity: 0.4,
+          spacing: 90,
+          edgeGradientFill: true,
+          edgeOpacity: 0.34,
           enableToolbar: false,
           highlightConnectedPath: highlightEnabled,
           dimOpacity: dimOpacity,
+          tooltipTemplate,
+          nodeTooltipTemplate,
+          tooltipBorderColor: '#e4ece0',
+          canvasStyle: 'border: 1px solid #e4ece0; border-radius: 12px; background: #fbfcfa; box-sizing: border-box;',
         };
       }
 
       function render() {
         const container = document.getElementById('svg-sankey');
         container.innerHTML = '';
-        sankeyInstance = new ApexSankey(container, buildOptions());
-        sankeyInstance.render(data);
+        const s = new ApexSankey(container, buildOptions());
+        // pathTrace layers the animated pulse on top of the built-in highlight.
+        s.use(ApexSankey.plugins.pathTrace({direction: traceDirection, color: '#e11d48', duration: 650, stagger: 190}));
+        s.render(data);
       }
 
       render();
 
-      // Toggle button
       const toggleBtn = document.getElementById('toggle-highlight');
       toggleBtn.addEventListener('click', () => {
         highlightEnabled = !highlightEnabled;
@@ -186,12 +315,20 @@
         render();
       });
 
-      // Opacity slider
       const opacitySlider = document.getElementById('dim-opacity');
       const opacityValue = document.getElementById('opacity-value');
       opacitySlider.addEventListener('input', () => {
         dimOpacity = parseFloat(opacitySlider.value);
         opacityValue.textContent = dimOpacity.toFixed(2);
+        render();
+      });
+
+      const dirSeg = document.getElementById('dir-seg');
+      dirSeg.addEventListener('click', (e) => {
+        const btn = e.target.closest('button');
+        if (!btn) return;
+        traceDirection = btn.dataset.dir;
+        for (const b of dirSeg.children) b.setAttribute('aria-pressed', String(b === btn));
         render();
       });
     </script>

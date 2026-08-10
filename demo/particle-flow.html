@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Particle Flow - Internet Packet Routing</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap"
+      rel="stylesheet"
+    />
+    <script src="../apexsankey.min.js"></script>
+    <style>
+      body {
+        max-width: 1000px;
+        margin: 0 auto;
+        font-family: 'Inter', sans-serif;
+        background: #070b16;
+        color: #e2e8f0;
+        padding: 24px 0 40px;
+      }
+      .wrap {
+        padding: 0 20px;
+      }
+      .kicker {
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.09em;
+        text-transform: uppercase;
+        color: #22d3ee;
+        margin-bottom: 6px;
+      }
+      h2 {
+        font-size: 24px;
+        font-weight: 700;
+        color: #f1f5f9;
+        margin: 0 0 6px 0;
+        line-height: 1.25;
+      }
+      .subtitle {
+        font-size: 13.5px;
+        line-height: 1.6;
+        color: #94a3b8;
+        margin: 0 0 16px 0;
+        max-width: 64ch;
+      }
+      code {
+        background: #131c30;
+        padding: 1px 6px;
+        border-radius: 4px;
+        font-size: 12px;
+        font-family: 'JetBrains Mono', monospace;
+        color: #67e8f9;
+      }
+      .legend {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 14px 20px;
+        margin-top: 14px;
+        font-size: 12px;
+        color: #94a3b8;
+      }
+      .legend span {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+      }
+      .legend i {
+        width: 11px;
+        height: 11px;
+        border-radius: 3px;
+        display: inline-block;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <div class="kicker">Feature · Particle Flow</div>
+      <h2>Particle Flow</h2>
+      <p class="subtitle">
+        Packets stream from clients through the edge into services and datastores. Particles drift along every ribbon
+        with density proportional to its throughput, so the busiest links visibly shimmer while quiet ones trickle. Set
+        with <code>particleFlow: true</code>; it is purely decorative and pauses under
+        <code>prefers-reduced-motion</code>.
+      </p>
+      <div id="svg-sankey"></div>
+      <div class="legend">
+        <span><i style="background: #38bdf8"></i> Clients</span>
+        <span><i style="background: #22d3ee"></i> Edge tier</span>
+        <span><i style="background: #a78bfa"></i> Services</span>
+        <span><i style="background: #34d399"></i> Data stores</span>
+      </div>
+    </div>
+    <script>
+      const data = {
+        nodes: [
+          // Clients
+          {id: 'Mobile', title: 'Mobile Apps', color: '#38bdf8'},
+          {id: 'Web', title: 'Web Browsers', color: '#818cf8'},
+          {id: 'Partners', title: 'Partner APIs', color: '#f472b6'},
+          {id: 'IoT', title: 'IoT Devices', color: '#fbbf24'},
+          // Edge
+          {id: 'LB', title: 'Load Balancer', color: '#22d3ee'},
+          {id: 'CDN', title: 'CDN Edge', color: '#2dd4bf'},
+          // Services
+          {id: 'Auth', title: 'Auth Service', color: '#a78bfa'},
+          {id: 'App', title: 'App Servers', color: '#60a5fa'},
+          {id: 'Media', title: 'Media Service', color: '#f59e0b'},
+          // Data stores
+          {id: 'DB', title: 'Primary DB', color: '#34d399'},
+          {id: 'Cache', title: 'Cache', color: '#4ade80'},
+          {id: 'Object', title: 'Object Storage', color: '#c084fc'},
+          {id: 'Analytics', title: 'Analytics', color: '#f87171'},
+        ],
+        edges: [
+          {source: 'Mobile', target: 'LB', value: 340},
+          {source: 'Web', target: 'CDN', value: 180},
+          {source: 'Web', target: 'LB', value: 220},
+          {source: 'Partners', target: 'LB', value: 120},
+          {source: 'IoT', target: 'LB', value: 160},
+          {source: 'CDN', target: 'Media', value: 180},
+          {source: 'LB', target: 'Auth', value: 260},
+          {source: 'LB', target: 'App', value: 580},
+          {source: 'Auth', target: 'DB', value: 150},
+          {source: 'Auth', target: 'Cache', value: 110},
+          {source: 'App', target: 'DB', value: 210},
+          {source: 'App', target: 'Cache', value: 200},
+          {source: 'App', target: 'Object', value: 90},
+          {source: 'App', target: 'Analytics', value: 80},
+          {source: 'Media', target: 'Object', value: 180},
+        ],
+      };
+
+      const unit = 'Gbps';
+      const fmt = (v) => v.toLocaleString('en-US');
+
+      const tooltipTemplate = ({source, target, value}) => `
+        <div style="font-family:Inter,sans-serif;background:#fff;border:1px solid #e2e8f0;border-radius:8px;box-shadow:0 6px 18px rgba(15,23,42,0.14);padding:9px 11px;min-width:160px">
+          <div style="display:flex;align-items:center;gap:7px;font-size:12px;font-weight:600;color:#e2e8f0">
+            <span style="width:9px;height:9px;border-radius:2px;background:${source.color}"></span>${source.title}
+            <span style="color:#475569">→</span>
+            <span style="width:9px;height:9px;border-radius:2px;background:${target.color}"></span>${target.title}
+          </div>
+          <div style="margin-top:6px;font-size:18px;font-weight:700;color:#f1f5f9">${fmt(value)}
+            <span style="font-size:11px;font-weight:500;color:#94a3b8;margin-left:3px">${unit}</span>
+          </div>
+        </div>`;
+
+      const nodeTooltipTemplate = ({node, value}) => `
+        <div style="font-family:Inter,sans-serif;background:#fff;border:1px solid #e2e8f0;border-radius:8px;box-shadow:0 6px 18px rgba(15,23,42,0.14);padding:9px 11px;min-width:130px">
+          <div style="display:flex;align-items:center;gap:7px;font-size:12px;font-weight:600;color:#e2e8f0">
+            <span style="width:9px;height:9px;border-radius:2px;background:${node.color}"></span>${node.title}
+          </div>
+          <div style="margin-top:6px;font-size:18px;font-weight:700;color:#f1f5f9">${fmt(value)}
+            <span style="font-size:11px;font-weight:500;color:#94a3b8;margin-left:3px">${unit}</span>
+          </div>
+        </div>`;
+
+      const s = new ApexSankey(document.getElementById('svg-sankey'), {
+        particleFlow: true,
+        width: '100%',
+        height: 540,
+        spacing: 90,
+        nodeWidth: 18,
+        fontFamily: 'Inter, sans-serif',
+        fontWeight: '600',
+        fontSize: '12px',
+        fontColor: '#cbd5e1',
+        edgeGradientFill: true,
+        edgeOpacity: 0.32,
+        tooltipTheme: 'dark',
+        tooltipBGColor: '#0b1120',
+        tooltipBorderColor: '#1e293b',
+        tooltipTemplate,
+        nodeTooltipTemplate,
+        canvasStyle: 'border: 1px solid #16233d; border-radius: 12px; background: #0a1122; box-sizing: border-box;',
+      });
+      s.render(data);
+    </script>
+  </body>
+</html>

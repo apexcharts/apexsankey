@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Animated Data Update - Energy Mix</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <script src="../apexsankey.min.js"></script>
+    <style>
+      body {
+        max-width: 1000px;
+        margin: 0 auto;
+        font-family: 'Inter', sans-serif;
+        background: #fff;
+        padding: 20px 0;
+      }
+      h2 {
+        font-size: 22px;
+        font-weight: 700;
+        color: #1a1a2e;
+        margin: 0 0 4px 0;
+      }
+      .subtitle {
+        font-size: 13px;
+        color: #6e6e6e;
+        margin-bottom: 16px;
+      }
+      .controls {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 14px;
+      }
+      button {
+        font:
+          600 13px 'Inter',
+          sans-serif;
+        padding: 8px 16px;
+        border-radius: 8px;
+        border: 1px solid #d7dbe0;
+        background: #fff;
+        color: #334155;
+        cursor: pointer;
+        transition:
+          background 0.15s ease,
+          border-color 0.15s ease;
+      }
+      button[aria-pressed='true'] {
+        background: #0d8f84;
+        border-color: #0d8f84;
+        color: #fff;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>Grid Energy Mix &mdash; Animated Update</h2>
+    <p class="subtitle">
+      Same nodes and flows, different values. Toggling the scenario calls <code>sankey.update(data)</code>, which
+      springs the nodes and ribbons to their new sizes because the topology is unchanged.
+    </p>
+    <div class="controls">
+      <button id="btn-2024" aria-pressed="true">2024 mix</button>
+      <button id="btn-2035" aria-pressed="false">2035 projection</button>
+    </div>
+    <div id="svg-sankey"></div>
+    <script>
+      const nodes = [
+        {id: 'Coal', title: 'Coal', color: '#64748B'},
+        {id: 'Gas', title: 'Natural Gas', color: '#F59E0B'},
+        {id: 'Nuclear', title: 'Nuclear', color: '#8B5CF6'},
+        {id: 'Wind', title: 'Wind', color: '#0EA5E9'},
+        {id: 'Solar', title: 'Solar', color: '#FBBF24'},
+        {id: 'Grid', title: 'Grid', color: '#0D8F84'},
+        {id: 'Homes', title: 'Homes', color: '#10B981'},
+        {id: 'Industry', title: 'Industry', color: '#F43F5E'},
+        {id: 'Transport', title: 'Transport', color: '#38BDF8'},
+      ];
+
+      // Identical source/target pairs in both scenarios -> topology is stable -> update() animates.
+      const scenarios = {
+        2024: [
+          {source: 'Coal', target: 'Grid', value: 380},
+          {source: 'Gas', target: 'Grid', value: 340},
+          {source: 'Nuclear', target: 'Grid', value: 200},
+          {source: 'Wind', target: 'Grid', value: 150},
+          {source: 'Solar', target: 'Grid', value: 90},
+          {source: 'Grid', target: 'Homes', value: 460},
+          {source: 'Grid', target: 'Industry', value: 480},
+          {source: 'Grid', target: 'Transport', value: 220},
+        ],
+        2035: [
+          {source: 'Coal', target: 'Grid', value: 90},
+          {source: 'Gas', target: 'Grid', value: 220},
+          {source: 'Nuclear', target: 'Grid', value: 260},
+          {source: 'Wind', target: 'Grid', value: 420},
+          {source: 'Solar', target: 'Grid', value: 380},
+          {source: 'Grid', target: 'Homes', value: 520},
+          {source: 'Grid', target: 'Industry', value: 500},
+          {source: 'Grid', target: 'Transport', value: 350},
+        ],
+      };
+
+      const options = {
+        nodeWidth: 18,
+        fontFamily: 'Inter, sans-serif',
+        fontWeight: '600',
+        fontSize: '12px',
+        fontColor: '#334155',
+        width: '100%',
+        height: 520,
+        edgeGradientFill: true,
+        edgeOpacity: 0.4,
+        enableToolbar: true,
+        canvasStyle: 'border: 1px solid #e2e8f0; border-radius: 8px; background: #fafafa; box-sizing: border-box;',
+      };
+
+      const sankey = new ApexSankey(document.getElementById('svg-sankey'), options);
+      sankey.render({nodes, edges: scenarios[2024]});
+
+      const btn2024 = document.getElementById('btn-2024');
+      const btn2035 = document.getElementById('btn-2035');
+
+      function show(year) {
+        sankey.update({nodes, edges: scenarios[year]});
+        btn2024.setAttribute('aria-pressed', String(year === 2024));
+        btn2035.setAttribute('aria-pressed', String(year === 2035));
+      }
+
+      btn2024.addEventListener('click', () => show(2024));
+      btn2035.addEventListener('click', () => show(2035));
+    </script>
+  </body>
+</html>
