@@ -1025,6 +1025,15 @@ declare class SankeyGraphRenderer extends Paper {
      */
     private renderChord;
     /**
+     * Release everything that outlives a render: the relayout/morph driver, the
+     * particle layer, drag handlers and the a11y helper.
+     *
+     * The motion driver is the one that matters here. It owns a rAF loop, and a
+     * diagram destroyed mid-morph would otherwise keep ticking and redrawing into
+     * a detached layer for as long as its springs took to settle.
+     */
+    destroy(): void;
+    /**
      * Update the diagram to new data. When the new layout shares the current
      * topology (same nodes, edges and edge routing) the change is spring-animated:
      * node positions, heights and flow ribbons interpolate to their new places.
