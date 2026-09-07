@@ -1,6 +1,6 @@
 {
   "name": "apexsankey",
-  "version": "1.12.1",
+  "version": "1.12.2",
   "dependencies": {},
   "repository": {
     "type": "git",
@@ -10,7 +10,7 @@
   "main": "./apexsankey.min.js",
   "module": "./apexsankey.es.min.js",
   "types": "./apexsankey.d.ts",
-  "license": "See LICENSE in LICENSE",
+  "license": "SEE LICENSE IN LICENSE",
   "exports": {
     ".": {
       "import": {
